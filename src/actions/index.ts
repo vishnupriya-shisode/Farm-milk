@@ -10,6 +10,7 @@ import {
 	verifyPin,
 	type Role,
 } from '../lib/auth/session';
+import { getLockoutRemainingMs, recordLoginFailure, recordLoginSuccess } from '../lib/auth/rate-limit';
 import { createCustomer, createQuantityOverride, getCustomer, updateCustomer } from '../lib/db/customers';
 import { markDelivery } from '../lib/db/deliveries';
 import { recordPayment } from '../lib/db/payments';
@@ -44,10 +45,20 @@ export const server = {
 				next: z.string().optional(),
 			}),
 			handler: async (input, context) => {
+				if (getLockoutRemainingMs(input.role) > 0) {
+					throw new ActionError({
+						code: 'TOO_MANY_REQUESTS',
+						message: 'Too many wrong PIN attempts. Please try again later.',
+					});
+				}
+
 				const user = getUserByRole(input.role);
 				if (!user || !verifyPin(input.pin, user.pin_hash)) {
+					recordLoginFailure(input.role);
 					throw new ActionError({ code: 'UNAUTHORIZED', message: 'Wrong PIN. Please try again.' });
 				}
+
+				recordLoginSuccess(input.role);
 				const token = createSessionToken({ role: user.role, name: user.name });
 				context.cookies.set(SESSION_COOKIE, token, sessionCookieOptions);
 				return { role: user.role, next: input.next ?? null };

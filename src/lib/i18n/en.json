@@ -80,7 +80,8 @@
 		"pinLabel": "Enter PIN",
 		"submit": "Continue",
 		"back": "Back",
-		"error": "Wrong PIN. Please try again."
+		"error": "Wrong PIN. Please try again.",
+		"locked": "Too many wrong PIN attempts. Please try again later."
 	},
 	"admin": {
 		"nav": {

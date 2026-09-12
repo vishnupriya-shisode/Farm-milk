@@ -45,7 +45,7 @@ const initialRole = roleParam === 'worker' ? 'worker' : roleParam === 'admin' ? 
 				{
 					result?.error && (
 						<p class="mb-4 rounded-md bg-warning-soft px-3 py-2 text-sm text-warning-deep">
-							{t('login.error')}
+							{result.error.code === 'TOO_MANY_REQUESTS' ? t('login.locked') : t('login.error')}
 						</p>
 					)
 				}

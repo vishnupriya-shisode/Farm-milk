@@ -5,6 +5,12 @@ CREATE TABLE IF NOT EXISTS app_users (
 	pin_hash TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS login_attempts (
+	role TEXT PRIMARY KEY CHECK (role IN ('admin', 'worker')),
+	failed_count INTEGER NOT NULL DEFAULT 0,
+	locked_until INTEGER
+);
+
 CREATE TABLE IF NOT EXISTS customers (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name TEXT NOT NULL,
