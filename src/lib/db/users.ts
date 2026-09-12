@@ -13,3 +13,7 @@ export function getUserByRole(role: Role): AppUser | undefined {
 		| AppUser
 		| undefined;
 }
+
+export function updateUserPin(role: Role, pinHash: string): void {
+	getDb().prepare('UPDATE app_users SET pin_hash = ? WHERE role = ?').run(pinHash, role);
+}

@@ -1,0 +1,99 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { actions } from 'astro:actions';
+
+const { t } = Astro.locals;
+const result = Astro.getActionResult(actions.users.setPin);
+const success = result && !result.error ? result.data.target_role : null;
+---
+
+<AdminLayout title={t('admin.settings.title')} active="settings">
+	<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.settings.title')}</h1>
+
+	<section class="mt-6 max-w-xl rounded-lg border border-hairline bg-canvas-elevated p-6">
+		<h2 class="text-lg font-semibold text-ink">{t('admin.settings.pinTitle')}</h2>
+		<p class="mt-1 text-sm text-mute">{t('admin.settings.pinSubtitle')}</p>
+
+		{
+			result?.error && (
+				<p class="mt-4 rounded-md bg-warning-soft px-3 py-2 text-sm text-warning-deep">{result.error.message}</p>
+			)
+		}
+		{
+			success === 'admin' && (
+				<p class="mt-4 rounded-md bg-accent-soft px-3 py-2 text-sm text-accent-deep">{t('admin.settings.successAdmin')}</p>
+			)
+		}
+		{
+			success === 'worker' && (
+				<p class="mt-4 rounded-md bg-accent-soft px-3 py-2 text-sm text-accent-deep">{t('admin.settings.successWorker')}</p>
+			)
+		}
+
+		<form method="POST" action={actions.users.setPin} class="mt-6 space-y-4 border-t border-hairline-soft pt-6 first:mt-4 first:border-0 first:pt-0">
+			<input type="hidden" name="target_role" value="worker" />
+			<div>
+				<label class="block text-sm font-medium text-ink" for="current_pin_worker">{t('admin.settings.currentPinLabel')}</label>
+				<input
+					id="current_pin_worker"
+					name="current_pin"
+					type="password"
+					inputmode="numeric"
+					autocomplete="off"
+					required
+					class="mt-1 w-full rounded-md border border-hairline px-3 py-2 tracking-widest outline-none focus:border-ink"
+				/>
+			</div>
+			<div>
+				<label class="block text-sm font-medium text-ink" for="new_pin_worker">{t('admin.settings.newWorkerPinLabel')}</label>
+				<input
+					id="new_pin_worker"
+					name="new_pin"
+					type="password"
+					inputmode="numeric"
+					autocomplete="off"
+					pattern="\d{4,6}"
+					required
+					class="mt-1 w-full rounded-md border border-hairline px-3 py-2 tracking-widest outline-none focus:border-ink"
+				/>
+				<p class="mt-1 text-xs text-mute">{t('admin.settings.pinHint')}</p>
+			</div>
+			<button type="submit" class="h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+				{t('admin.settings.saveWorkerPin')}
+			</button>
+		</form>
+
+		<form method="POST" action={actions.users.setPin} class="mt-6 space-y-4 border-t border-hairline-soft pt-6">
+			<input type="hidden" name="target_role" value="admin" />
+			<div>
+				<label class="block text-sm font-medium text-ink" for="current_pin_admin">{t('admin.settings.currentPinLabel')}</label>
+				<input
+					id="current_pin_admin"
+					name="current_pin"
+					type="password"
+					inputmode="numeric"
+					autocomplete="off"
+					required
+					class="mt-1 w-full rounded-md border border-hairline px-3 py-2 tracking-widest outline-none focus:border-ink"
+				/>
+			</div>
+			<div>
+				<label class="block text-sm font-medium text-ink" for="new_pin_admin">{t('admin.settings.newAdminPinLabel')}</label>
+				<input
+					id="new_pin_admin"
+					name="new_pin"
+					type="password"
+					inputmode="numeric"
+					autocomplete="off"
+					pattern="\d{4,6}"
+					required
+					class="mt-1 w-full rounded-md border border-hairline px-3 py-2 tracking-widest outline-none focus:border-ink"
+				/>
+				<p class="mt-1 text-xs text-mute">{t('admin.settings.pinHint')}</p>
+			</div>
+			<button type="submit" class="h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+				{t('admin.settings.saveAdminPin')}
+			</button>
+		</form>
+	</section>
+</AdminLayout>

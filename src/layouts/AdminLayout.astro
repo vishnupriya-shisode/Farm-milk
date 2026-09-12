@@ -3,7 +3,7 @@ import Layout from './Layout.astro';
 
 interface Props {
 	title: string;
-	active: 'dashboard' | 'customers' | 'deliveries' | 'payments' | 'billing';
+	active: 'dashboard' | 'customers' | 'deliveries' | 'payments' | 'billing' | 'settings';
 }
 
 const { title, active } = Astro.props;
@@ -15,6 +15,7 @@ const navItems: { key: Props['active']; href: string; label: string }[] = [
 	{ key: 'deliveries', href: '/admin/deliveries', label: t('admin.nav.deliveries') },
 	{ key: 'payments', href: '/admin/payments', label: t('admin.nav.payments') },
 	{ key: 'billing', href: '/admin/billing', label: t('admin.nav.billing') },
+	{ key: 'settings', href: '/admin/settings', label: t('admin.nav.settings') },
 ];
 ---
 

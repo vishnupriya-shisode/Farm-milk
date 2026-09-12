@@ -1,9 +1,10 @@
 import { ActionError, defineAction } from 'astro:actions';
 import { z } from 'astro:schema';
 import type { ActionAPIContext } from 'astro:actions';
-import { getUserByRole } from '../lib/db/users';
+import { getUserByRole, updateUserPin } from '../lib/db/users';
 import {
 	createSessionToken,
+	hashPin,
 	SESSION_COOKIE,
 	sessionCookieOptions,
 	verifyPin,
@@ -49,6 +50,27 @@ export const server = {
 				const token = createSessionToken({ role: user.role, name: user.name });
 				context.cookies.set(SESSION_COOKIE, token, sessionCookieOptions);
 				return { role: user.role };
+			},
+		}),
+	},
+	users: {
+		setPin: defineAction({
+			accept: 'form',
+			input: z.object({
+				target_role: z.enum(['admin', 'worker']),
+				current_pin: z.string().min(1),
+				new_pin: z.string().regex(/^\d{4,6}$/, 'PIN must be 4-6 digits'),
+			}),
+			handler: async (input, context) => {
+				requireRole(context, ['admin']);
+
+				const admin = getUserByRole('admin');
+				if (!admin || !verifyPin(input.current_pin, admin.pin_hash)) {
+					throw new ActionError({ code: 'UNAUTHORIZED', message: 'Your current PIN is incorrect.' });
+				}
+
+				updateUserPin(input.target_role, hashPin(input.new_pin));
+				return { target_role: input.target_role };
 			},
 		}),
 	},

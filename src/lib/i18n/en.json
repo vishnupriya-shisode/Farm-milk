@@ -88,7 +88,8 @@
 			"customers": "Customers",
 			"deliveries": "Deliveries",
 			"payments": "Payments",
-			"billing": "Billing"
+			"billing": "Billing",
+			"settings": "Settings"
 		},
 		"dashboard": {
 			"title": "Today's Overview",
@@ -177,6 +178,19 @@
 			"qty": "New Quantity (L)",
 			"reason": "Reason (optional)",
 			"save": "Save Change"
+		},
+		"settings": {
+			"title": "Settings",
+			"pinTitle": "Login PINs",
+			"pinSubtitle": "Set the PIN each person uses to log in. You'll need your own current PIN to confirm any change.",
+			"currentPinLabel": "Your Current PIN",
+			"newAdminPinLabel": "New Admin PIN",
+			"newWorkerPinLabel": "New Delivery Worker PIN",
+			"saveAdminPin": "Update Admin PIN",
+			"saveWorkerPin": "Update Worker PIN",
+			"pinHint": "4-6 digits",
+			"successAdmin": "Admin PIN updated.",
+			"successWorker": "Worker PIN updated."
 		}
 	},
 	"worker": {

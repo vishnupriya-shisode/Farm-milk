@@ -88,7 +88,8 @@
 			"customers": "ग्राहक",
 			"deliveries": "डिलिव्हरी",
 			"payments": "पेमेंट",
-			"billing": "बिलिंग"
+			"billing": "बिलिंग",
+			"settings": "सेटिंग्ज"
 		},
 		"dashboard": {
 			"title": "आजचा आढावा",
@@ -177,6 +178,19 @@
 			"qty": "नवीन प्रमाण (लि)",
 			"reason": "कारण (ऐच्छिक)",
 			"save": "बदल जतन करा"
+		},
+		"settings": {
+			"title": "सेटिंग्ज",
+			"pinTitle": "लॉगिन पिन",
+			"pinSubtitle": "प्रत्येकजण लॉगिनसाठी वापरत असलेला पिन येथे सेट करा. कोणताही बदल करण्यासाठी तुमचा स्वतःचा सध्याचा पिन लागेल.",
+			"currentPinLabel": "तुमचा सध्याचा पिन",
+			"newAdminPinLabel": "नवीन अ‍ॅडमिन पिन",
+			"newWorkerPinLabel": "नवीन डिलिव्हरी कर्मचारी पिन",
+			"saveAdminPin": "अ‍ॅडमिन पिन बदला",
+			"saveWorkerPin": "कर्मचारी पिन बदला",
+			"pinHint": "4-6 अंकी",
+			"successAdmin": "अ‍ॅडमिन पिन बदलला.",
+			"successWorker": "कर्मचारी पिन बदलला."
 		}
 	},
 	"worker": {
