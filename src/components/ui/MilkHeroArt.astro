@@ -1,61 +1,71 @@
 ---
 /*
-  Minimal single-weight line-art hero scene: a milk can and a peeking cow
-  rendered as outline illustration (no cartoon fills), with restrained
-  micro-motion — a slow orbit ring, gentle parallax float, a hand-drawn milk
-  stream that draws itself in, and a rare, subtle blink. Pure inline SVG/CSS,
-  no image assets, built on the site's existing color tokens.
+  Flat, bold "sticker" mascot style (thick uniform outline, no gradients,
+  color mostly held to ink + cream with the brand green/gold used sparingly
+  as accent) — a chibi standing cow with a speech-bubble "MOO" beside a
+  milk can, on one simple flat hill. Motion is a playful-but-restrained
+  idle bounce, blink, tail sway and a looping milk pour, so it stays lively
+  without being a busy cartoon loop. Pure inline SVG/CSS, no image assets.
 */
 ---
 
 <div class="milk-hero-art" aria-hidden="true">
-	<svg viewBox="0 0 400 380" class="h-full w-full" fill="none">
-		<circle cx="205" cy="160" r="150" class="art-glow" />
-		<circle cx="205" cy="170" r="172" class="art-orbit" />
+	<svg viewBox="0 0 400 380" class="h-full w-full">
+		<circle cx="46" cy="46" r="20" class="art-sun" />
 
-		<circle cx="322" cy="60" r="16" class="art-sun-ring" />
-		<g class="art-sun-ticks">
-			<line x1="322" y1="34" x2="322" y2="26" />
-			<line x1="322" y1="86" x2="322" y2="94" />
-			<line x1="296" y1="60" x2="288" y2="60" />
-			<line x1="348" y1="60" x2="356" y2="60" />
-		</g>
-
-		<path d="M0 316c56-14 118-16 168-2s96 14 138 2 62-8 94 2" class="art-ground art-ground-back" />
-		<path d="M0 336c50-10 116-12 166 0s100 10 140 0 60-6 94 2" class="art-ground art-ground-front" />
+		<path d="M0 306q70-16 150-4t160 6t90-4v76H0z" class="art-hill" />
 
 		<g class="art-cow-group">
-			<path d="M103 186q-9-15 1-27" class="art-stroke" />
-			<path d="M145 186q9-15-1-27" class="art-stroke" />
-			<ellipse cx="76" cy="222" rx="16" ry="26" transform="rotate(-30 76 222)" class="art-line" />
-			<ellipse cx="172" cy="222" rx="16" ry="26" transform="rotate(30 172 222)" class="art-line" />
-			<circle cx="124" cy="230" r="50" class="art-line art-cow-head" />
-			<ellipse cx="124" cy="258" rx="32" ry="13" class="art-line" />
-			<path d="M98 251q26 7 52 0" class="art-stroke" />
-			<circle cx="106" cy="260" r="1.8" class="art-dot" />
-			<circle cx="142" cy="260" r="1.8" class="art-dot" />
+			<path d="M76 260q-24 6-20 34" class="art-tail" />
+			<circle cx="54" cy="296" r="6" class="art-tail-tuft" />
+
+			<ellipse cx="58" cy="160" rx="14" ry="20" transform="rotate(-20 58 160)" class="art-ear" />
+			<ellipse cx="190" cy="160" rx="14" ry="20" transform="rotate(20 190 160)" class="art-ear" />
+
+			<path d="M92 124c-24-4-42-26-34-50c4-12 18-12 24-2c8 14 8 34 10 52z" class="art-horn" />
+			<path d="M156 124c24-4 42-26 34-50c-4-12-18-12-24-2c-8 14-8 34-10 52z" class="art-horn" />
+
+			<rect x="90" y="296" width="20" height="34" rx="9" class="art-leg" />
+			<rect x="140" y="296" width="20" height="34" rx="9" class="art-leg" />
+			<rect x="90" y="318" width="20" height="12" rx="5" class="art-hoof" />
+			<rect x="140" y="318" width="20" height="12" rx="5" class="art-hoof" />
+
+			<rect x="74" y="222" width="100" height="86" rx="38" class="art-body" />
+
+			<rect x="54" y="110" width="140" height="132" rx="48" class="art-head" />
+			<path d="M132 132c18-10 46-4 52 18c4 18-8 38-28 40c-18 2-30-12-30-30c0-10 2-20 6-28z" class="art-patch" />
+
+			<circle cx="158" cy="160" r="9" class="art-eye-halo" />
 			<g class="art-cow-eyes">
-				<circle cx="106" cy="216" r="2.6" class="art-dot" />
-				<circle cx="142" cy="216" r="2.6" class="art-dot" />
+				<circle cx="95" cy="165" r="6" class="art-dot" />
+				<circle cx="158" cy="160" r="4.5" class="art-dot" />
 			</g>
-			<path d="M112 276q12 5 24 0" class="art-stroke" />
+
+			<circle cx="112" cy="210" r="3.2" class="art-dot" />
+			<circle cx="138" cy="210" r="3.2" class="art-dot" />
+			<path d="M108 222q16 8 32 0" class="art-mouth" />
+		</g>
+
+		<g class="art-bubble-group">
+			<path d="M212 96l-14 16 22-4z" class="art-bubble" />
+			<rect x="200" y="48" width="90" height="48" rx="22" class="art-bubble" />
+			<text x="245" y="80" text-anchor="middle" class="art-bubble-text">MOO</text>
 		</g>
 
 		<g class="art-can-group">
-			<path d="M212 190h80l9 116a9 9 0 01-9 9h-80a9 9 0 01-9-9z" class="art-line" />
-			<path d="M218 150h68l-6 40h-56z" class="art-line" />
-			<ellipse cx="252" cy="150" rx="34" ry="10" class="art-line" />
-			<path d="M296 214q22 6 22 26t-18 24" class="art-line" />
-			<line x1="214" y1="248" x2="290" y2="248" class="art-line" />
+			<ellipse cx="258" cy="322" rx="52" ry="11" class="art-shadow" />
+			<path d="M216 196h76l9 112a9 9 0 01-9 9h-76a9 9 0 01-9-9z" class="art-can-body" />
+			<path d="M222 158h64l-6 38h-52z" class="art-can-neck" />
+			<ellipse cx="254" cy="158" rx="32" ry="9" class="art-can-lid" />
+			<ellipse cx="254" cy="154" rx="19" ry="5" class="art-can-cap" />
+			<path d="M298 220q20 6 20 24t-16 22" class="art-can-handle" />
+			<rect x="220" y="246" width="72" height="11" rx="5" class="art-can-band" />
 		</g>
 
-		<path
-			id="milk-stream"
-			d="M252 150v18c0 10 6 16 6 26s-6 14-6 22"
-			class="art-stream"
-			pathLength="1"
-		/>
-		<ellipse cx="252" cy="150" rx="9" ry="2.6" class="art-ripple" />
+		<g class="art-drop">
+			<path d="M0 -14c8 9 13 16 13 23a13 13 0 11-26 0c0-7 5-14 13-23z" class="art-drop-fill" />
+		</g>
+		<ellipse cx="254" cy="158" rx="9" ry="2.6" class="art-ripple" />
 	</svg>
 </div>
 
@@ -66,125 +76,190 @@
 		margin-inline: auto;
 	}
 
-	.art-glow {
-		fill: var(--color-accent-soft);
-		opacity: 0.35;
+	.art-sun {
+		fill: var(--color-harvest);
+		animation: breathe 6s ease-in-out infinite;
+		transform-origin: 46px 46px;
 	}
 
-	.art-orbit {
-		stroke: var(--color-hairline);
-		stroke-width: 1.25;
-		stroke-dasharray: 1 7;
-		stroke-linecap: round;
-		transform-origin: 205px 170px;
-		animation: spin 42s linear infinite;
+	.art-hill {
+		fill: var(--color-accent);
+		stroke: var(--color-ink);
+		stroke-width: 3;
 	}
 
-	.art-line {
-		stroke: var(--color-ink);
-		stroke-width: 2.25;
-		stroke-linecap: round;
-		stroke-linejoin: round;
-		fill: var(--color-canvas-elevated);
+	.art-cow-group {
+		animation: bounce 4.2s cubic-bezier(0.45, 0, 0.2, 1) infinite;
+		transform-origin: 124px 330px;
 	}
-	.art-cow-head {
-		fill: var(--color-canvas-elevated);
-	}
-	.art-stroke {
-		stroke: var(--color-ink);
-		stroke-width: 2.25;
-		stroke-linecap: round;
+
+	.art-tail {
 		fill: none;
+		stroke: var(--color-ink);
+		stroke-width: 4;
+		stroke-linecap: round;
+		transform-origin: 76px 260px;
+		animation: sway 3.4s ease-in-out infinite;
+	}
+	.art-tail-tuft {
+		fill: var(--color-ink);
+	}
+
+	.art-ear {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+	.art-horn {
+		fill: var(--color-ink);
+	}
+
+	.art-leg {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+	.art-hoof {
+		fill: var(--color-ink);
+	}
+
+	.art-body {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+
+	.art-head {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+	.art-patch {
+		fill: var(--color-ink);
+	}
+	.art-eye-halo {
+		fill: var(--color-canvas-elevated);
 	}
 	.art-dot {
 		fill: var(--color-ink);
 	}
-
-	.art-sun-ring {
-		stroke: var(--color-harvest);
-		stroke-width: 2;
-		transform-origin: 322px 60px;
-		animation: breathe 6s ease-in-out infinite;
-	}
-	.art-sun-ticks line {
-		stroke: var(--color-harvest);
-		stroke-width: 2;
-		stroke-linecap: round;
-		opacity: 0.7;
-	}
-	.art-sun-ticks {
-		transform-origin: 322px 60px;
-		animation: breathe 6s ease-in-out infinite;
-	}
-
-	.art-ground {
-		stroke-width: 1.75;
-		stroke-linecap: round;
-		fill: none;
-	}
-	.art-ground-back {
-		stroke: var(--color-mute);
-		opacity: 0.4;
-	}
-	.art-ground-front {
-		stroke: var(--color-accent);
-		opacity: 0.6;
-	}
-
-	.art-cow-group {
-		animation: float-a 5.5s ease-in-out infinite;
-		transform-origin: 124px 260px;
-	}
-	.art-can-group {
-		animation: float-b 6.5s ease-in-out infinite;
-		transform-origin: 252px 250px;
-		animation-delay: -1.2s;
-	}
-
 	.art-cow-eyes {
-		transform-origin: 124px 220px;
-		animation: blink 7s ease-in-out infinite;
+		transform-origin: 124px 162px;
+		animation: blink 6s ease-in-out infinite;
+	}
+	.art-mouth {
+		fill: none;
+		stroke: var(--color-ink);
+		stroke-width: 3.5;
+		stroke-linecap: round;
 	}
 
-	.art-stream {
+	.art-bubble-group {
+		animation: bob 4.2s ease-in-out infinite;
+		animation-delay: -0.6s;
+		transform-origin: 245px 96px;
+	}
+	.art-bubble {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 4;
+		stroke-linejoin: round;
+	}
+	.art-bubble-text {
+		font-family: var(--font-sans);
+		font-weight: 800;
+		font-size: 26px;
+		letter-spacing: 0.02em;
+		fill: var(--color-ink);
+	}
+
+	.art-can-group {
+		animation: bob 5.4s ease-in-out infinite;
+		animation-delay: -1.6s;
+		transform-origin: 254px 260px;
+	}
+	.art-shadow {
+		fill: var(--color-ink);
+		opacity: 0.1;
+	}
+	.art-can-body {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+	.art-can-neck {
+		fill: var(--color-mute);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+	.art-can-lid {
+		fill: var(--color-harvest);
+		stroke: var(--color-ink);
+		stroke-width: 5;
+	}
+	.art-can-cap {
+		fill: var(--color-harvest-deep);
+	}
+	.art-can-handle {
 		fill: none;
-		stroke: var(--color-accent-deep);
-		stroke-width: 2.25;
+		stroke: var(--color-ink);
+		stroke-width: 5;
 		stroke-linecap: round;
-		stroke-dasharray: 1;
-		stroke-dashoffset: 1;
+	}
+	.art-can-band {
+		fill: var(--color-accent);
+	}
+
+	.art-drop-fill {
+		fill: var(--color-canvas-elevated);
+		stroke: var(--color-ink);
+		stroke-width: 3;
+	}
+	.art-drop {
 		opacity: 0;
-		animation: pour 3.4s ease-in-out infinite;
+		animation: drop-fall 3s ease-in infinite;
 	}
 	.art-ripple {
+		fill: none;
 		stroke: var(--color-accent);
-		stroke-width: 1.75;
+		stroke-width: 3;
 		opacity: 0;
-		animation: ripple 3.4s ease-out infinite;
+		animation: ripple 3s ease-out infinite;
 	}
 
-	@keyframes spin {
-		to {
-			transform: rotate(360deg);
+	@keyframes bounce {
+		0%,
+		100% {
+			transform: translateY(0) scaleY(1);
+		}
+		40% {
+			transform: translateY(-9px) scaleY(1.04);
+		}
+		55% {
+			transform: translateY(0) scaleY(0.95);
+		}
+		72% {
+			transform: translateY(-3px) scaleY(1.01);
 		}
 	}
 
-	@keyframes float-a {
+	@keyframes bob {
 		0%,
 		100% {
 			transform: translateY(0);
 		}
 		50% {
-			transform: translateY(-6px);
+			transform: translateY(-5px);
 		}
 	}
-	@keyframes float-b {
+
+	@keyframes sway {
 		0%,
 		100% {
-			transform: translateY(0);
+			transform: rotate(0deg);
 		}
 		50% {
-			transform: translateY(-4px);
+			transform: rotate(16deg);
 		}
 	}
 
@@ -196,75 +271,75 @@
 		}
 		50% {
 			transform: scale(1.08);
-			opacity: 0.65;
+			opacity: 0.8;
 		}
 	}
 
 	@keyframes blink {
 		0%,
-		94%,
+		92%,
 		100% {
 			transform: scaleY(1);
 		}
-		97% {
+		96% {
 			transform: scaleY(0.15);
 		}
 	}
 
-	@keyframes pour {
+	@keyframes drop-fall {
 		0% {
-			stroke-dashoffset: 1;
 			opacity: 0;
+			transform: translate(254px, 122px) scale(0.8);
 		}
-		10% {
-			opacity: 0.9;
+		12% {
+			opacity: 1;
 		}
-		55% {
-			stroke-dashoffset: 0;
-			opacity: 0.9;
+		42% {
+			opacity: 1;
+			transform: translate(254px, 158px) scale(1);
 		}
-		68% {
+		46% {
 			opacity: 0;
+			transform: translate(254px, 158px) scale(0.6);
 		}
 		100% {
-			stroke-dashoffset: 0;
 			opacity: 0;
+			transform: translate(254px, 158px) scale(0.6);
 		}
 	}
 
 	@keyframes ripple {
 		0%,
-		52% {
+		38% {
 			opacity: 0;
-			transform: scale(0.5);
+			transform: scale(0.4);
 		}
-		60% {
-			opacity: 0.8;
-			transform: scale(0.7);
+		46% {
+			opacity: 0.9;
+			transform: scale(0.6);
 		}
-		85% {
+		70% {
 			opacity: 0;
-			transform: scale(1.9);
+			transform: scale(2.2);
 		}
 		100% {
 			opacity: 0;
-			transform: scale(1.9);
+			transform: scale(2.2);
 		}
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.art-orbit,
-		.art-sun-ring,
-		.art-sun-ticks,
+		.art-sun,
 		.art-cow-group,
-		.art-can-group,
+		.art-tail,
 		.art-cow-eyes,
-		.art-stream,
+		.art-bubble-group,
+		.art-can-group,
+		.art-drop,
 		.art-ripple {
 			animation: none;
 		}
-		.art-stream,
-		.art-ripple {
+		.art-drop {
 			opacity: 0;
 		}
 	}
