@@ -36,13 +36,6 @@
 	--color-harvest-deep: #96601c;
 	--color-harvest-soft: #f7e8cf;
 
-	/* Wheat-field-over-pasture gradient stops — the hero's single decorative flourish */
-	--color-gradient-milk: #fffaf0;
-	--color-gradient-cream: #f7e8cf;
-	--color-gradient-amber: #d99a34;
-	--color-gradient-leaf: #6f9c5f;
-	--color-gradient-pasture: #345a2c;
-
 	/* Semantic */
 	--color-error: #d0342c;
 	--color-error-deep: #a8261f;
@@ -91,19 +84,5 @@
 	h3 {
 		font-weight: 600;
 		letter-spacing: -0.02em;
-	}
-}
-
-@layer utilities {
-	/* Hero mesh gradient: dawn cream/amber blooming over pasture green, with a milk-white
-	   highlight — the only place this site allows itself decorative color. */
-	.hero-mesh {
-		background-image:
-			radial-gradient(circle at 12% 18%, var(--color-gradient-cream) 0%, transparent 42%),
-			radial-gradient(circle at 82% 8%, var(--color-gradient-amber) 0%, transparent 48%),
-			radial-gradient(circle at 78% 78%, var(--color-gradient-leaf) 0%, transparent 50%),
-			radial-gradient(circle at 15% 85%, var(--color-gradient-pasture) 0%, transparent 45%),
-			radial-gradient(circle at 50% 50%, var(--color-gradient-milk) 0%, transparent 60%);
-		filter: saturate(1.05);
 	}
 }

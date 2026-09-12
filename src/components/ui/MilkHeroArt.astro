@@ -1,0 +1,271 @@
+---
+/*
+  Minimal single-weight line-art hero scene: a milk can and a peeking cow
+  rendered as outline illustration (no cartoon fills), with restrained
+  micro-motion — a slow orbit ring, gentle parallax float, a hand-drawn milk
+  stream that draws itself in, and a rare, subtle blink. Pure inline SVG/CSS,
+  no image assets, built on the site's existing color tokens.
+*/
+---
+
+<div class="milk-hero-art" aria-hidden="true">
+	<svg viewBox="0 0 400 380" class="h-full w-full" fill="none">
+		<circle cx="205" cy="160" r="150" class="art-glow" />
+		<circle cx="205" cy="170" r="172" class="art-orbit" />
+
+		<circle cx="322" cy="60" r="16" class="art-sun-ring" />
+		<g class="art-sun-ticks">
+			<line x1="322" y1="34" x2="322" y2="26" />
+			<line x1="322" y1="86" x2="322" y2="94" />
+			<line x1="296" y1="60" x2="288" y2="60" />
+			<line x1="348" y1="60" x2="356" y2="60" />
+		</g>
+
+		<path d="M0 316c56-14 118-16 168-2s96 14 138 2 62-8 94 2" class="art-ground art-ground-back" />
+		<path d="M0 336c50-10 116-12 166 0s100 10 140 0 60-6 94 2" class="art-ground art-ground-front" />
+
+		<g class="art-cow-group">
+			<path d="M103 186q-9-15 1-27" class="art-stroke" />
+			<path d="M145 186q9-15-1-27" class="art-stroke" />
+			<ellipse cx="76" cy="222" rx="16" ry="26" transform="rotate(-30 76 222)" class="art-line" />
+			<ellipse cx="172" cy="222" rx="16" ry="26" transform="rotate(30 172 222)" class="art-line" />
+			<circle cx="124" cy="230" r="50" class="art-line art-cow-head" />
+			<ellipse cx="124" cy="258" rx="32" ry="13" class="art-line" />
+			<path d="M98 251q26 7 52 0" class="art-stroke" />
+			<circle cx="106" cy="260" r="1.8" class="art-dot" />
+			<circle cx="142" cy="260" r="1.8" class="art-dot" />
+			<g class="art-cow-eyes">
+				<circle cx="106" cy="216" r="2.6" class="art-dot" />
+				<circle cx="142" cy="216" r="2.6" class="art-dot" />
+			</g>
+			<path d="M112 276q12 5 24 0" class="art-stroke" />
+		</g>
+
+		<g class="art-can-group">
+			<path d="M212 190h80l9 116a9 9 0 01-9 9h-80a9 9 0 01-9-9z" class="art-line" />
+			<path d="M218 150h68l-6 40h-56z" class="art-line" />
+			<ellipse cx="252" cy="150" rx="34" ry="10" class="art-line" />
+			<path d="M296 214q22 6 22 26t-18 24" class="art-line" />
+			<line x1="214" y1="248" x2="290" y2="248" class="art-line" />
+		</g>
+
+		<path
+			id="milk-stream"
+			d="M252 150v18c0 10 6 16 6 26s-6 14-6 22"
+			class="art-stream"
+			pathLength="1"
+		/>
+		<ellipse cx="252" cy="150" rx="9" ry="2.6" class="art-ripple" />
+	</svg>
+</div>
+
+<style>
+	.milk-hero-art {
+		width: 100%;
+		max-width: 26rem;
+		margin-inline: auto;
+	}
+
+	.art-glow {
+		fill: var(--color-accent-soft);
+		opacity: 0.35;
+	}
+
+	.art-orbit {
+		stroke: var(--color-hairline);
+		stroke-width: 1.25;
+		stroke-dasharray: 1 7;
+		stroke-linecap: round;
+		transform-origin: 205px 170px;
+		animation: spin 42s linear infinite;
+	}
+
+	.art-line {
+		stroke: var(--color-ink);
+		stroke-width: 2.25;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+		fill: var(--color-canvas-elevated);
+	}
+	.art-cow-head {
+		fill: var(--color-canvas-elevated);
+	}
+	.art-stroke {
+		stroke: var(--color-ink);
+		stroke-width: 2.25;
+		stroke-linecap: round;
+		fill: none;
+	}
+	.art-dot {
+		fill: var(--color-ink);
+	}
+
+	.art-sun-ring {
+		stroke: var(--color-harvest);
+		stroke-width: 2;
+		transform-origin: 322px 60px;
+		animation: breathe 6s ease-in-out infinite;
+	}
+	.art-sun-ticks line {
+		stroke: var(--color-harvest);
+		stroke-width: 2;
+		stroke-linecap: round;
+		opacity: 0.7;
+	}
+	.art-sun-ticks {
+		transform-origin: 322px 60px;
+		animation: breathe 6s ease-in-out infinite;
+	}
+
+	.art-ground {
+		stroke-width: 1.75;
+		stroke-linecap: round;
+		fill: none;
+	}
+	.art-ground-back {
+		stroke: var(--color-mute);
+		opacity: 0.4;
+	}
+	.art-ground-front {
+		stroke: var(--color-accent);
+		opacity: 0.6;
+	}
+
+	.art-cow-group {
+		animation: float-a 5.5s ease-in-out infinite;
+		transform-origin: 124px 260px;
+	}
+	.art-can-group {
+		animation: float-b 6.5s ease-in-out infinite;
+		transform-origin: 252px 250px;
+		animation-delay: -1.2s;
+	}
+
+	.art-cow-eyes {
+		transform-origin: 124px 220px;
+		animation: blink 7s ease-in-out infinite;
+	}
+
+	.art-stream {
+		fill: none;
+		stroke: var(--color-accent-deep);
+		stroke-width: 2.25;
+		stroke-linecap: round;
+		stroke-dasharray: 1;
+		stroke-dashoffset: 1;
+		opacity: 0;
+		animation: pour 3.4s ease-in-out infinite;
+	}
+	.art-ripple {
+		stroke: var(--color-accent);
+		stroke-width: 1.75;
+		opacity: 0;
+		animation: ripple 3.4s ease-out infinite;
+	}
+
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+	@keyframes float-a {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-6px);
+		}
+	}
+	@keyframes float-b {
+		0%,
+		100% {
+			transform: translateY(0);
+		}
+		50% {
+			transform: translateY(-4px);
+		}
+	}
+
+	@keyframes breathe {
+		0%,
+		100% {
+			transform: scale(1);
+			opacity: 1;
+		}
+		50% {
+			transform: scale(1.08);
+			opacity: 0.65;
+		}
+	}
+
+	@keyframes blink {
+		0%,
+		94%,
+		100% {
+			transform: scaleY(1);
+		}
+		97% {
+			transform: scaleY(0.15);
+		}
+	}
+
+	@keyframes pour {
+		0% {
+			stroke-dashoffset: 1;
+			opacity: 0;
+		}
+		10% {
+			opacity: 0.9;
+		}
+		55% {
+			stroke-dashoffset: 0;
+			opacity: 0.9;
+		}
+		68% {
+			opacity: 0;
+		}
+		100% {
+			stroke-dashoffset: 0;
+			opacity: 0;
+		}
+	}
+
+	@keyframes ripple {
+		0%,
+		52% {
+			opacity: 0;
+			transform: scale(0.5);
+		}
+		60% {
+			opacity: 0.8;
+			transform: scale(0.7);
+		}
+		85% {
+			opacity: 0;
+			transform: scale(1.9);
+		}
+		100% {
+			opacity: 0;
+			transform: scale(1.9);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.art-orbit,
+		.art-sun-ring,
+		.art-sun-ticks,
+		.art-cow-group,
+		.art-can-group,
+		.art-cow-eyes,
+		.art-stream,
+		.art-ripple {
+			animation: none;
+		}
+		.art-stream,
+		.art-ripple {
+			opacity: 0;
+		}
+	}
+</style>

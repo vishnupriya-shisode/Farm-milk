@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/ui/Button.astro';
 import Icon from '../components/ui/Icon.astro';
+import MilkHeroArt from '../components/ui/MilkHeroArt.astro';
 
 const { t, lang } = Astro.locals;
 ---
@@ -15,21 +16,24 @@ const { t, lang } = Astro.locals;
 	</header>
 
 	<main>
-		<section class="hero-mesh border-b border-hairline">
-			<div class="mx-auto max-w-6xl px-6 py-24 sm:py-32">
-				<p class="font-mono text-xs uppercase tracking-wide text-accent-deep">{t('hero.eyebrow')}</p>
-				<h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
-					{t('hero.title')}
-				</h1>
-				<p class="mt-6 max-w-xl text-lg text-body">{t('hero.subtitle')}</p>
-				<p class="mt-6 inline-flex items-center gap-2 rounded-full border border-hairline bg-canvas-elevated px-4 py-2 text-sm font-medium text-accent-deep">
-					<Icon name="rupee" class="h-4 w-4" />
-					{t('hero.rateNote')}
-				</p>
-				<div class="mt-8 flex flex-wrap gap-4">
-					<Button href="/login?role=admin" size="lg">{t('hero.ctaPrimary')}</Button>
-					<Button href="/login?role=worker" variant="secondary" size="lg">{t('hero.ctaSecondary')}</Button>
+		<section class="border-b border-hairline bg-canvas-elevated">
+			<div class="mx-auto grid max-w-6xl items-center gap-12 px-6 py-20 sm:py-28 lg:grid-cols-[1.1fr_0.9fr] lg:gap-8">
+				<div>
+					<p class="font-mono text-xs uppercase tracking-wide text-accent-deep">{t('hero.eyebrow')}</p>
+					<h1 class="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+						{t('hero.title')}
+					</h1>
+					<p class="mt-6 max-w-xl text-lg text-body">{t('hero.subtitle')}</p>
+					<p class="mt-6 inline-flex items-center gap-2 rounded-full border border-hairline bg-canvas px-4 py-2 text-sm font-medium text-accent-deep">
+						<Icon name="rupee" class="h-4 w-4" />
+						{t('hero.rateNote')}
+					</p>
+					<div class="mt-8 flex flex-wrap gap-4">
+						<Button href="/login?role=admin" size="lg">{t('hero.ctaPrimary')}</Button>
+						<Button href="/login?role=worker" variant="secondary" size="lg">{t('hero.ctaSecondary')}</Button>
+					</div>
 				</div>
+				<MilkHeroArt />
 			</div>
 		</section>
 
