@@ -6,7 +6,7 @@ export default defineConfig({
 	testDir: './tests/e2e',
 	fullyParallel: false,
 	workers: 1,
-	reporter: 'list',
+	reporter: process.env.CI ? [['list'], ['html', { open: 'never' }]] : 'list',
 	use: {
 		baseURL: `http://localhost:${PORT}`,
 		trace: 'retain-on-failure',
