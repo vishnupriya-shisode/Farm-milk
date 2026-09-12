@@ -1,6 +1,7 @@
 ---
 import AdminLayout from '../../../layouts/AdminLayout.astro';
 import Button from '../../../components/ui/Button.astro';
+import MilkDoodle from '../../../components/ui/MilkDoodle.astro';
 import { listCustomers } from '../../../lib/db/customers';
 import { getPendingBalance } from '../../../lib/db/payments';
 
@@ -11,13 +12,19 @@ const withPending = customers.map((c) => ({ ...c, pending: getPendingBalance(c.i
 
 <AdminLayout title={t('admin.customers.title')} active="customers">
 	<div class="flex items-center justify-between">
-		<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.customers.title')}</h1>
+		<h1 class="flex items-center gap-2 text-2xl font-semibold tracking-tight text-ink">
+			{t('admin.customers.title')}
+			<MilkDoodle variant="carton" class="h-6 w-6" />
+		</h1>
 		<Button href="/admin/customers/new">{t('admin.customers.addNew')}</Button>
 	</div>
 
 	{
 		withPending.length === 0 ? (
-			<p class="mt-8 text-sm text-mute">{t('admin.customers.empty')}</p>
+			<div class="mt-10 flex flex-col items-center text-center">
+				<MilkDoodle variant="cow" class="h-16 w-16 opacity-80" />
+				<p class="mt-3 text-sm text-mute">{t('admin.customers.empty')}</p>
+			</div>
 		) : (
 			<div class="mt-6 overflow-x-auto rounded-lg border border-hairline bg-canvas-elevated">
 				<table class="w-full text-left text-sm">

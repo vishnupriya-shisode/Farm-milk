@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import MilkDoodle from '../../components/ui/MilkDoodle.astro';
 import { actions } from 'astro:actions';
 import { getDayView } from '../../lib/db/deliveries';
 
@@ -19,7 +20,10 @@ const grouped = {
 		<header class="sticky top-0 z-10 border-b border-hairline bg-canvas-elevated px-6 py-4">
 			<div class="flex items-center justify-between">
 				<div>
-					<p class="font-mono text-xs uppercase tracking-wide text-mute">{t('appName')}</p>
+					<p class="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-mute">
+						<MilkDoodle variant="drop" class="h-4 w-4" />
+						{t('appName')}
+					</p>
 					<h1 class="text-lg font-semibold text-ink">{t('worker.title')}</h1>
 				</div>
 				<form method="POST" action="/logout">

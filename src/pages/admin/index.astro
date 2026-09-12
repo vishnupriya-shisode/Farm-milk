@@ -1,5 +1,6 @@
 ---
 import AdminLayout from '../../layouts/AdminLayout.astro';
+import MilkDoodle from '../../components/ui/MilkDoodle.astro';
 import { getTodaySummary } from '../../lib/db/deliveries';
 import { listCustomers } from '../../lib/db/customers';
 import { getTotalPendingAcrossCustomers } from '../../lib/db/payments';
@@ -26,7 +27,10 @@ const links = [
 ---
 
 <AdminLayout title={t('admin.dashboard.title')} active="dashboard">
-	<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.dashboard.title')}</h1>
+	<h1 class="flex items-center gap-2 text-2xl font-semibold tracking-tight text-ink">
+		{t('admin.dashboard.title')}
+		<MilkDoodle variant="cow" class="h-7 w-7" />
+	</h1>
 	<p class="mt-1 text-sm text-mute">{today}</p>
 
 	<div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

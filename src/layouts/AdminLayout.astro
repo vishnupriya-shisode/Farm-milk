@@ -1,5 +1,6 @@
 ---
 import Layout from './Layout.astro';
+import MilkDoodle from '../components/ui/MilkDoodle.astro';
 
 interface Props {
 	title: string;
@@ -23,7 +24,10 @@ const navItems: { key: Props['active']; href: string; label: string }[] = [
 	<div class="min-h-screen bg-canvas">
 		<header class="sticky top-0 z-10 border-b border-hairline bg-canvas-elevated">
 			<div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-				<a href="/admin" class="font-mono text-xs uppercase tracking-wide text-mute">{t('appName')}</a>
+				<a href="/admin" class="flex items-center gap-1.5 font-mono text-xs uppercase tracking-wide text-mute">
+					<MilkDoodle variant="drop" class="h-4 w-4" />
+					{t('appName')}
+				</a>
 				<div class="flex items-center gap-4">
 					<span class="hidden text-sm text-mute sm:inline">{user?.name}</span>
 					<form method="POST" action="/logout">

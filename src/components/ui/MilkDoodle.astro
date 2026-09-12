@@ -1,0 +1,67 @@
+---
+/*
+  Tiny flat-sticker doodles (drop / cow / carton) in the same ink-outline,
+  cream-fill language as MilkHeroArt, scaled down for inline use as small
+  brand accents next to headings — not full illustrations.
+*/
+interface Props {
+	variant: 'drop' | 'cow' | 'carton';
+	class?: string;
+}
+
+const { variant, class: className = 'h-6 w-6' } = Astro.props;
+---
+
+{
+	variant === 'drop' && (
+		<svg viewBox="0 0 24 24" class={className} aria-hidden="true">
+			<path
+				d="M12 3.2c3.4 4.3 5.8 7.8 5.8 11a5.8 5.8 0 11-11.6 0c0-3.2 2.4-6.7 5.8-11z"
+				class="fill-canvas-elevated stroke-ink"
+				stroke-width="1.6"
+			/>
+			<path
+				d="M9.3 15.6a3 3 0 002 2.6"
+				class="stroke-accent"
+				stroke-width="1.3"
+				fill="none"
+				stroke-linecap="round"
+				opacity="0.6"
+			/>
+		</svg>
+	)
+}
+
+{
+	variant === 'cow' && (
+		<svg viewBox="0 0 32 32" class={className} aria-hidden="true">
+			<ellipse cx="9" cy="10" rx="4" ry="5" transform="rotate(-18 9 10)" class="fill-canvas-elevated stroke-ink" stroke-width="1.6" />
+			<ellipse cx="23" cy="10" rx="4" ry="5" transform="rotate(18 23 10)" class="fill-canvas-elevated stroke-ink" stroke-width="1.6" />
+			<rect x="6" y="8" width="20" height="18" rx="9" class="fill-canvas-elevated stroke-ink" stroke-width="1.6" />
+			<path
+				d="M18 11c3-1.6 7-.4 7.6 3c.6 2.8-1.6 5.6-4.8 5.8c-2.6.2-4.4-1.8-4.4-4.4c0-1.6.4-3 1.6-4.4z"
+				class="fill-harvest-soft stroke-ink"
+				stroke-width="1.2"
+			/>
+			<circle cx="12" cy="16" r="1.4" class="fill-ink" />
+			<circle cx="22" cy="15" r="1" class="fill-ink" />
+			<path d="M14 21q2 1.4 4 0" class="stroke-ink" stroke-width="1.4" fill="none" stroke-linecap="round" />
+		</svg>
+	)
+}
+
+{
+	variant === 'carton' && (
+		<svg viewBox="0 0 32 32" class={className} aria-hidden="true">
+			<path
+				d="M9 13l7-6l7 6v14a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 019 27z"
+				class="fill-canvas-elevated stroke-ink"
+				stroke-width="1.6"
+				stroke-linejoin="round"
+			/>
+			<path d="M9 13h14" class="stroke-ink" stroke-width="1.4" />
+			<path d="M16 7v6" class="stroke-ink" stroke-width="1.2" />
+			<rect x="11" y="18" width="10" height="4" rx="1" class="fill-accent-soft stroke-accent-deep" stroke-width="1" />
+		</svg>
+	)
+}
