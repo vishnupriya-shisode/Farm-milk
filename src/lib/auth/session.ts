@@ -45,7 +45,10 @@ export function verifySessionToken(token: string | undefined): SessionPayload | 
 	if (!token) return null;
 	const [body, signature] = token.split('.');
 	if (!body || !signature) return null;
-	if (sign(body) !== signature) return null;
+
+	const expected = Buffer.from(sign(body), 'hex');
+	const actual = Buffer.from(signature, 'hex');
+	if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
 
 	try {
 		const payload = JSON.parse(Buffer.from(body, 'base64url').toString()) as SessionPayload;
