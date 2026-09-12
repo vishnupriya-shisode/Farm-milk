@@ -76,11 +76,20 @@ export const server = {
 			handler: async (input, context) => {
 				requireRole(context, ['admin']);
 
+				if (getLockoutRemainingMs('admin') > 0) {
+					throw new ActionError({
+						code: 'TOO_MANY_REQUESTS',
+						message: 'Too many wrong PIN attempts. Please try again later.',
+					});
+				}
+
 				const admin = getUserByRole('admin');
 				if (!admin || !verifyPin(input.current_pin, admin.pin_hash)) {
+					recordLoginFailure('admin');
 					throw new ActionError({ code: 'UNAUTHORIZED', message: 'Your current PIN is incorrect.' });
 				}
 
+				recordLoginSuccess('admin');
 				updateUserPin(input.target_role, hashPin(input.new_pin));
 				return { target_role: input.target_role };
 			},
