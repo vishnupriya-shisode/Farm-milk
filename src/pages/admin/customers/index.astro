@@ -1,0 +1,67 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import Button from '../../../components/ui/Button.astro';
+import { listCustomers } from '../../../lib/db/customers';
+import { getPendingBalance } from '../../../lib/db/payments';
+
+const { t } = Astro.locals;
+const customers = listCustomers();
+const withPending = customers.map((c) => ({ ...c, pending: getPendingBalance(c.id) }));
+---
+
+<AdminLayout title={t('admin.customers.title')} active="customers">
+	<div class="flex items-center justify-between">
+		<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.customers.title')}</h1>
+		<Button href="/admin/customers/new">{t('admin.customers.addNew')}</Button>
+	</div>
+
+	{
+		withPending.length === 0 ? (
+			<p class="mt-8 text-sm text-mute">{t('admin.customers.empty')}</p>
+		) : (
+			<div class="mt-6 overflow-x-auto rounded-lg border border-hairline bg-canvas-elevated">
+				<table class="w-full text-left text-sm">
+					<thead class="border-b border-hairline text-mute">
+						<tr>
+							<th class="px-4 py-3 font-medium">{t('common.name')}</th>
+							<th class="px-4 py-3 font-medium">{t('common.phone')}</th>
+							<th class="px-4 py-3 font-medium">{t('admin.customers.morningQty')}</th>
+							<th class="px-4 py-3 font-medium">{t('admin.customers.eveningQty')}</th>
+							<th class="px-4 py-3 font-medium">{t('common.status')}</th>
+							<th class="px-4 py-3 font-medium">{t('admin.customers.pendingLabel')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{withPending.map((c) => (
+							<tr class="border-b border-hairline-soft last:border-0 hover:bg-hairline-soft">
+								<td class="px-4 py-3">
+									<a href={`/admin/customers/${c.id}`} class="font-medium text-ink hover:text-accent">
+										{c.name}
+									</a>
+								</td>
+								<td class="px-4 py-3 text-body">{c.phone ?? '—'}</td>
+								<td class="px-4 py-3 text-body">{c.default_qty_morning}</td>
+								<td class="px-4 py-3 text-body">{c.default_qty_evening}</td>
+								<td class="px-4 py-3">
+									<span
+										class:list={[
+											'rounded-full px-2 py-0.5 text-xs font-medium',
+											c.status === 'active' ? 'bg-accent-soft text-accent-deep' : 'bg-hairline-soft text-mute',
+										]}
+									>
+										{c.status === 'active' ? t('common.active') : t('common.paused')}
+									</span>
+								</td>
+								<td class="px-4 py-3 font-medium">
+									<span class={c.pending > 0.01 ? 'text-error-deep' : 'text-mute'}>
+										{t('common.rupee')}{c.pending.toFixed(2)}
+									</span>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+		)
+	}
+</AdminLayout>

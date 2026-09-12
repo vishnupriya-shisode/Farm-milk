@@ -1,0 +1,65 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { actions } from 'astro:actions';
+
+const { t } = Astro.locals;
+
+const result = Astro.getActionResult(actions.customers.create);
+if (result && !result.error) {
+	return Astro.redirect(`/admin/customers/${result.data.id}`);
+}
+---
+
+<AdminLayout title={t('admin.customers.newTitle')} active="customers">
+	<a href="/admin/customers" class="text-sm text-mute hover:text-ink">← {t('common.back')}</a>
+	<h1 class="mt-2 text-2xl font-semibold tracking-tight text-ink">{t('admin.customers.newTitle')}</h1>
+
+	<form
+		method="POST"
+		action={actions.customers.create}
+		class="mt-6 max-w-xl rounded-lg border border-hairline bg-canvas-elevated p-6"
+	>
+		{
+			result?.error && (
+				<p class="mb-4 rounded-md bg-warning-soft px-3 py-2 text-sm text-warning-deep">
+					{result.error.message}
+				</p>
+			)
+		}
+
+		<label class="block text-sm font-medium text-ink" for="name">{t('common.name')}</label>
+		<input id="name" name="name" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+
+		<div class="mt-4 grid grid-cols-2 gap-4">
+			<div>
+				<label class="block text-sm font-medium text-ink" for="phone">{t('common.phone')}</label>
+				<input id="phone" name="phone" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+			</div>
+			<div>
+				<label class="block text-sm font-medium text-ink" for="rate_per_liter">{t('admin.customers.rate')}</label>
+				<input id="rate_per_liter" name="rate_per_liter" type="number" step="0.01" min="0" value="60" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+			</div>
+		</div>
+
+		<label class="mt-4 block text-sm font-medium text-ink" for="address">{t('common.address')}</label>
+		<input id="address" name="address" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+
+		<div class="mt-4 grid grid-cols-2 gap-4">
+			<div>
+				<label class="block text-sm font-medium text-ink" for="default_qty_morning">{t('admin.customers.morningQty')}</label>
+				<input id="default_qty_morning" name="default_qty_morning" type="number" step="0.1" min="0" value="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+			</div>
+			<div>
+				<label class="block text-sm font-medium text-ink" for="default_qty_evening">{t('admin.customers.eveningQty')}</label>
+				<input id="default_qty_evening" name="default_qty_evening" type="number" step="0.1" min="0" value="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+			</div>
+		</div>
+
+		<label class="mt-4 block text-sm font-medium text-ink" for="notes">{t('common.notes')}</label>
+		<textarea id="notes" name="notes" rows="2" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink"></textarea>
+
+		<button type="submit" class="mt-6 h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+			{t('admin.customers.saveCustomer')}
+		</button>
+	</form>
+</AdminLayout>

@@ -1,0 +1,61 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getBillingOverview } from '../../../lib/db/billing';
+
+const { t } = Astro.locals;
+const yearMonth = Astro.url.searchParams.get('month') ?? new Date().toISOString().slice(0, 7);
+const rows = getBillingOverview(yearMonth);
+---
+
+<AdminLayout title={t('admin.billing.title')} active="billing">
+	<div class="flex flex-wrap items-center justify-between gap-3">
+		<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.billing.title')}</h1>
+		<form method="GET" class="flex items-center gap-2">
+			<label class="text-sm text-body" for="month">{t('admin.billing.selectMonth')}</label>
+			<input
+				id="month"
+				name="month"
+				type="month"
+				value={yearMonth}
+				onchange="this.form.submit()"
+				class="rounded-md border border-hairline px-3 py-1.5 text-sm outline-none focus:border-ink"
+			/>
+		</form>
+	</div>
+
+	<div class="mt-6 overflow-x-auto rounded-lg border border-hairline bg-canvas-elevated">
+		<table class="w-full text-left text-sm">
+			<thead class="border-b border-hairline text-mute">
+				<tr>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.customer')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.totalLiters')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.totalAmount')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.paid')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.pending')}</th>
+					<th class="px-4 py-3 font-medium" />
+				</tr>
+			</thead>
+			<tbody>
+				{rows.map((row) => (
+					<tr class="border-b border-hairline-soft last:border-0">
+						<td class="px-4 py-3 font-medium text-ink">{row.name}</td>
+						<td class="px-4 py-3 text-body">{row.totalLiters} {t('common.liters')}</td>
+						<td class="px-4 py-3 text-body">{t('common.rupee')}{row.totalAmount.toFixed(2)}</td>
+						<td class="px-4 py-3 text-body">{t('common.rupee')}{row.paidInMonth.toFixed(2)}</td>
+						<td class:list={['px-4 py-3 font-medium', row.pendingOverall > 0.01 ? 'text-error-deep' : 'text-mute']}>
+							{t('common.rupee')}{row.pendingOverall.toFixed(2)}
+						</td>
+						<td class="px-4 py-3">
+							<a href={`/admin/billing/${row.customerId}?month=${yearMonth}`} class="text-sm font-medium text-accent-deep hover:underline">
+								{t('admin.billing.viewStatement')}
+							</a>
+						</td>
+					</tr>
+				))}
+				{rows.length === 0 && (
+					<tr><td colspan="6" class="px-4 py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
+				)}
+			</tbody>
+		</table>
+	</div>
+</AdminLayout>

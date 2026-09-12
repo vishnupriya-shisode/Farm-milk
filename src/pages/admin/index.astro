@@ -1,0 +1,66 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { getTodaySummary } from '../../lib/db/deliveries';
+import { listCustomers } from '../../lib/db/customers';
+import { getTotalPendingAcrossCustomers } from '../../lib/db/payments';
+
+const { t } = Astro.locals;
+const today = new Date().toISOString().slice(0, 10);
+const summary = getTodaySummary(today);
+const activeCustomers = listCustomers({ activeOnly: true });
+const pendingTotal = getTotalPendingAcrossCustomers();
+
+const stats = [
+	{ label: t('admin.dashboard.liters'), value: `${summary.totalLiters} ${t('common.liters')}` },
+	{ label: t('admin.dashboard.delivered'), value: String(summary.deliveredCount) },
+	{ label: t('admin.dashboard.skipped'), value: String(summary.skippedCount) },
+	{ label: t('admin.dashboard.extra'), value: `${summary.extraLiters} ${t('common.liters')}` },
+];
+
+const links = [
+	{ href: '/admin/customers', label: t('admin.dashboard.goTo.customers') },
+	{ href: '/admin/deliveries', label: t('admin.dashboard.goTo.deliveries') },
+	{ href: '/admin/payments', label: t('admin.dashboard.goTo.payments') },
+	{ href: '/admin/billing', label: t('admin.dashboard.goTo.billing') },
+];
+---
+
+<AdminLayout title={t('admin.dashboard.title')} active="dashboard">
+	<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.dashboard.title')}</h1>
+	<p class="mt-1 text-sm text-mute">{today}</p>
+
+	<div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		{
+			stats.map((stat) => (
+				<div class="rounded-lg border border-hairline bg-canvas-elevated p-5">
+					<p class="text-sm text-mute">{stat.label}</p>
+					<p class="mt-2 text-2xl font-semibold text-ink">{stat.value}</p>
+				</div>
+			))
+		}
+	</div>
+
+	<div class="mt-4 grid gap-4 sm:grid-cols-2">
+		<div class="rounded-lg border border-hairline bg-canvas-elevated p-5">
+			<p class="text-sm text-mute">{t('admin.dashboard.pendingTotal')}</p>
+			<p class="mt-2 text-2xl font-semibold text-error-deep">{t('common.rupee')}{pendingTotal.toFixed(2)}</p>
+		</div>
+		<div class="rounded-lg border border-hairline bg-canvas-elevated p-5">
+			<p class="text-sm text-mute">{t('admin.dashboard.customersCount')}</p>
+			<p class="mt-2 text-2xl font-semibold text-ink">{activeCustomers.length}</p>
+		</div>
+	</div>
+
+	<div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		{
+			links.map((link) => (
+				<a
+					href={link.href}
+					class="rounded-lg border border-hairline bg-canvas-elevated p-5 text-sm font-medium text-ink transition-colors hover:border-ink"
+				>
+					{link.label} →
+				</a>
+			))
+		}
+	</div>
+</AdminLayout>

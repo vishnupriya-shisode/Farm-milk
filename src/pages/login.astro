@@ -1,0 +1,77 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { actions } from 'astro:actions';
+
+const { t, lang, user } = Astro.locals;
+
+if (user) {
+	return Astro.redirect(user.role === 'admin' ? '/admin' : '/worker');
+}
+
+const result = Astro.getActionResult(actions.auth.login);
+if (result && !result.error) {
+	return Astro.redirect(result.data.role === 'admin' ? '/admin' : '/worker');
+}
+
+const roleParam = Astro.url.searchParams.get('role');
+const initialRole = roleParam === 'worker' ? 'worker' : roleParam === 'admin' ? 'admin' : null;
+---
+
+<Layout title={`${t('login.title')} · ${t('appName')}`} lang={lang}>
+	<div class="flex min-h-screen items-center justify-center bg-canvas px-6 py-12">
+		<div class="w-full max-w-sm">
+			<a href="/" class="block text-center font-mono text-xs uppercase tracking-wide text-mute">{t('appName')}</a>
+			<h1 class="mt-4 text-center text-2xl font-semibold tracking-tight text-ink">{t('login.title')}</h1>
+			<p class="mt-2 text-center text-sm text-body">{t('login.subtitle')}</p>
+
+			<form
+				method="POST"
+				action={actions.auth.login}
+				class="mt-8 rounded-lg border border-hairline bg-canvas-elevated p-6"
+			>
+				{
+					result?.error && (
+						<p class="mb-4 rounded-md bg-warning-soft px-3 py-2 text-sm text-warning-deep">
+							{t('login.error')}
+						</p>
+					)
+				}
+
+				<fieldset class="grid grid-cols-2 gap-3">
+					<label class="cursor-pointer">
+						<input type="radio" name="role" value="admin" class="peer sr-only" checked={initialRole !== 'worker'} />
+						<div class="rounded-md border border-hairline px-3 py-3 text-center text-sm peer-checked:border-ink peer-checked:bg-ink peer-checked:text-on-primary">
+							<div class="font-medium">{t('login.roleAdmin')}</div>
+						</div>
+					</label>
+					<label class="cursor-pointer">
+						<input type="radio" name="role" value="worker" class="peer sr-only" checked={initialRole === 'worker'} />
+						<div class="rounded-md border border-hairline px-3 py-3 text-center text-sm peer-checked:border-ink peer-checked:bg-ink peer-checked:text-on-primary">
+							<div class="font-medium">{t('login.roleWorker')}</div>
+						</div>
+					</label>
+				</fieldset>
+
+				<label class="mt-6 block text-sm font-medium text-ink" for="pin">{t('login.pinLabel')}</label>
+				<input
+					id="pin"
+					name="pin"
+					type="password"
+					inputmode="numeric"
+					autocomplete="off"
+					required
+					class="mt-2 w-full rounded-md border border-hairline px-3 py-3 text-lg tracking-widest outline-none focus:border-ink"
+				/>
+
+				<button
+					type="submit"
+					class="mt-6 h-11 w-full rounded-[100px] bg-ink text-base font-medium text-on-primary transition-colors hover:bg-ink/90"
+				>
+					{t('login.submit')}
+				</button>
+
+				<a href="/" class="mt-4 block text-center text-sm text-mute hover:text-ink">{t('login.back')}</a>
+			</form>
+		</div>
+	</div>
+</Layout>

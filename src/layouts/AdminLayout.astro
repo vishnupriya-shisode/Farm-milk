@@ -1,0 +1,53 @@
+---
+import Layout from './Layout.astro';
+
+interface Props {
+	title: string;
+	active: 'dashboard' | 'customers' | 'deliveries' | 'payments' | 'billing';
+}
+
+const { title, active } = Astro.props;
+const { t, lang, user } = Astro.locals;
+
+const navItems: { key: Props['active']; href: string; label: string }[] = [
+	{ key: 'dashboard', href: '/admin', label: t('admin.nav.dashboard') },
+	{ key: 'customers', href: '/admin/customers', label: t('admin.nav.customers') },
+	{ key: 'deliveries', href: '/admin/deliveries', label: t('admin.nav.deliveries') },
+	{ key: 'payments', href: '/admin/payments', label: t('admin.nav.payments') },
+	{ key: 'billing', href: '/admin/billing', label: t('admin.nav.billing') },
+];
+---
+
+<Layout title={`${title} · ${t('appName')}`} lang={lang}>
+	<div class="min-h-screen bg-canvas">
+		<header class="sticky top-0 z-10 border-b border-hairline bg-canvas-elevated">
+			<div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+				<a href="/admin" class="font-mono text-xs uppercase tracking-wide text-mute">{t('appName')}</a>
+				<div class="flex items-center gap-4">
+					<span class="hidden text-sm text-mute sm:inline">{user?.name}</span>
+					<form method="POST" action="/logout">
+						<button type="submit" class="text-sm font-medium text-ink hover:text-accent">{t('common.logout')}</button>
+					</form>
+				</div>
+			</div>
+			<nav class="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-6 pb-2">
+				{
+					navItems.map((item) => (
+						<a
+							href={item.href}
+							class:list={[
+								'whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
+								item.key === active ? 'bg-ink text-on-primary' : 'text-body hover:bg-hairline-soft',
+							]}
+						>
+							{item.label}
+						</a>
+					))
+				}
+			</nav>
+		</header>
+		<main class="mx-auto max-w-6xl px-6 py-8">
+			<slot />
+		</main>
+	</div>
+</Layout>

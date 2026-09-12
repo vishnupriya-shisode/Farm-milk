@@ -1,0 +1,66 @@
+---
+interface Props {
+	name: 'leaf' | 'shield' | 'user' | 'calendar' | 'truck' | 'rupee' | 'drop';
+	class?: string;
+}
+
+const { name, class: className = 'h-6 w-6' } = Astro.props;
+---
+
+{
+	name === 'leaf' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<path d="M5 20c9 0 14-5 14-14 0-.55-.02-1.01-.06-1.4C10.6 4.9 5 9.9 5 18c0 .7.03 1.36.08 1.9" />
+			<path d="M5.5 19.5C9 15 12.5 12 18.4 8.6" />
+		</svg>
+	)
+}
+{
+	name === 'shield' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<path d="M12 3.5l7 2.5v5.2c0 4.6-3 8.2-7 9.3-4-1.1-7-4.7-7-9.3V6l7-2.5z" />
+			<path d="M9 12l2 2 4-4.2" />
+		</svg>
+	)
+}
+{
+	name === 'user' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<circle cx="12" cy="8" r="3.5" />
+			<path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5" />
+		</svg>
+	)
+}
+{
+	name === 'calendar' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<rect x="3.5" y="5" width="17" height="15" rx="2" />
+			<path d="M3.5 9.5h17M8 3v3.2M16 3v3.2" />
+			<path d="M7.5 13.2h2.2M11.4 13.2h2.2M15.3 13.2h1.2M7.5 16.6h2.2M11.4 16.6h2.2" />
+		</svg>
+	)
+}
+{
+	name === 'truck' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<path d="M3 7h10v9H3z" />
+			<path d="M13 10.5h4.2L20 13.3V16h-7z" />
+			<circle cx="7" cy="17.5" r="1.6" />
+			<circle cx="17" cy="17.5" r="1.6" />
+		</svg>
+	)
+}
+{
+	name === 'rupee' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<path d="M7 4.5h10M7 8.5h10M7 4.5c5.2 0 8 1.4 8 4S12.2 12.5 7 12.5h-.3L16 19.5" />
+		</svg>
+	)
+}
+{
+	name === 'drop' && (
+		<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class={className} aria-hidden="true">
+			<path d="M12 3.5c3.2 4 5.5 7.3 5.5 10.4a5.5 5.5 0 11-11 0c0-3.1 2.3-6.4 5.5-10.4z" />
+		</svg>
+	)
+}

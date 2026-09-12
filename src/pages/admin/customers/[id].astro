@@ -1,0 +1,218 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { actions } from 'astro:actions';
+import { getCustomer } from '../../../lib/db/customers';
+import { listRecordsForCustomer } from '../../../lib/db/deliveries';
+import { listPaymentsForCustomer, getPendingBalance } from '../../../lib/db/payments';
+
+const { t } = Astro.locals;
+const id = Number(Astro.params.id);
+const customer = getCustomer(id);
+
+if (!customer) {
+	return Astro.redirect('/admin/customers');
+}
+
+const updateResult = Astro.getActionResult(actions.customers.update);
+const paymentResult = Astro.getActionResult(actions.payments.record);
+const overrideResult = Astro.getActionResult(actions.customers.addOverride);
+
+const records = listRecordsForCustomer(id, 15);
+const payments = listPaymentsForCustomer(id, 10);
+const pending = getPendingBalance(id);
+const today = new Date().toISOString().slice(0, 10);
+---
+
+<AdminLayout title={customer.name} active="customers">
+	<a href="/admin/customers" class="text-sm text-mute hover:text-ink">← {t('common.back')}</a>
+
+	<div class="mt-2 flex flex-wrap items-center justify-between gap-2">
+		<h1 class="text-2xl font-semibold tracking-tight text-ink">{customer.name}</h1>
+		<span class={`text-lg font-semibold ${pending > 0.01 ? 'text-error-deep' : 'text-accent-deep'}`}>
+			{t('admin.customers.pendingLabel')}: {t('common.rupee')}{pending.toFixed(2)}
+		</span>
+	</div>
+
+	<div class="mt-6 grid gap-6 lg:grid-cols-2">
+		<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+			<h2 class="text-lg font-semibold text-ink">{t('admin.customers.editTitle')}</h2>
+			<form method="POST" action={actions.customers.update} class="mt-4 space-y-4">
+				<input type="hidden" name="id" value={customer.id} />
+
+				<div>
+					<label class="block text-sm font-medium text-ink" for="name">{t('common.name')}</label>
+					<input id="name" name="name" required value={customer.name} class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+				</div>
+
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-sm font-medium text-ink" for="phone">{t('common.phone')}</label>
+						<input id="phone" name="phone" value={customer.phone ?? ''} class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+					<div>
+						<label class="block text-sm font-medium text-ink" for="rate_per_liter">{t('admin.customers.rate')}</label>
+						<input id="rate_per_liter" name="rate_per_liter" type="number" step="0.01" min="0" value={customer.rate_per_liter} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-ink" for="address">{t('common.address')}</label>
+					<input id="address" name="address" value={customer.address ?? ''} class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+				</div>
+
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-sm font-medium text-ink" for="default_qty_morning">{t('admin.customers.morningQty')}</label>
+						<input id="default_qty_morning" name="default_qty_morning" type="number" step="0.1" min="0" value={customer.default_qty_morning} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+					<div>
+						<label class="block text-sm font-medium text-ink" for="default_qty_evening">{t('admin.customers.eveningQty')}</label>
+						<input id="default_qty_evening" name="default_qty_evening" type="number" step="0.1" min="0" value={customer.default_qty_evening} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-ink" for="status">{t('common.status')}</label>
+					<select id="status" name="status" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">
+						<option value="active" selected={customer.status === 'active'}>{t('common.active')}</option>
+						<option value="paused" selected={customer.status === 'paused'}>{t('common.paused')}</option>
+					</select>
+				</div>
+
+				<div>
+					<label class="block text-sm font-medium text-ink" for="notes">{t('common.notes')}</label>
+					<textarea id="notes" name="notes" rows="2" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">{customer.notes ?? ''}</textarea>
+				</div>
+
+				<button type="submit" class="h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+					{t('common.save')}
+				</button>
+			</form>
+		</section>
+
+		<div class="space-y-6">
+			<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+				<h2 class="text-lg font-semibold text-ink">{t('admin.customers.recordPayment')}</h2>
+				<form method="POST" action={actions.payments.record} class="mt-4 space-y-4">
+					<input type="hidden" name="customer_id" value={customer.id} />
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-sm font-medium text-ink" for="amount">{t('admin.payments.amount')}</label>
+							<input id="amount" name="amount" type="number" step="0.01" min="0.01" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+						</div>
+						<div>
+							<label class="block text-sm font-medium text-ink" for="payment_date">{t('admin.payments.date')}</label>
+							<input id="payment_date" name="payment_date" type="date" value={today} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+						</div>
+					</div>
+					<div>
+						<label class="block text-sm font-medium text-ink" for="method">{t('admin.payments.method')}</label>
+						<select id="method" name="method" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">
+							<option value="cash">{t('admin.payments.methodCash')}</option>
+							<option value="phonepe">{t('admin.payments.methodPhonepe')}</option>
+							<option value="other">{t('admin.payments.methodOther')}</option>
+						</select>
+					</div>
+					<button type="submit" class="h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+						{t('admin.payments.save')}
+					</button>
+				</form>
+			</section>
+
+			<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+				<h2 class="text-lg font-semibold text-ink">{t('admin.customers.addOverride')}</h2>
+				<form method="POST" action={actions.customers.addOverride} class="mt-4 space-y-4">
+					<input type="hidden" name="customer_id" value={customer.id} />
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-sm font-medium text-ink" for="start_date">{t('admin.override.from')}</label>
+							<input id="start_date" name="start_date" type="date" value={today} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+						</div>
+						<div>
+							<label class="block text-sm font-medium text-ink" for="end_date">{t('admin.override.to')}</label>
+							<input id="end_date" name="end_date" type="date" value={today} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+						</div>
+					</div>
+					<div class="grid grid-cols-2 gap-4">
+						<div>
+							<label class="block text-sm font-medium text-ink" for="shift">{t('admin.override.shift')}</label>
+							<select id="shift" name="shift" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">
+								<option value="morning">{t('common.morning')}</option>
+								<option value="evening">{t('common.evening')}</option>
+							</select>
+						</div>
+						<div>
+							<label class="block text-sm font-medium text-ink" for="quantity">{t('admin.override.qty')}</label>
+							<input id="quantity" name="quantity" type="number" step="0.1" min="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+						</div>
+					</div>
+					<div>
+						<label class="block text-sm font-medium text-ink" for="reason">{t('admin.override.reason')}</label>
+						<input id="reason" name="reason" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+					<button type="submit" class="h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+						{t('admin.override.save')}
+					</button>
+				</form>
+			</section>
+		</div>
+	</div>
+
+	<div class="mt-6 grid gap-6 lg:grid-cols-2">
+		<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+			<h2 class="text-lg font-semibold text-ink">{t('admin.customers.deliveryHistory')}</h2>
+			<div class="mt-4 overflow-x-auto">
+				<table class="w-full text-left text-sm">
+					<thead class="border-b border-hairline text-mute">
+						<tr>
+							<th class="py-2 pr-3 font-medium">{t('admin.billing.dateCol')}</th>
+							<th class="py-2 pr-3 font-medium">{t('admin.billing.shiftCol')}</th>
+							<th class="py-2 pr-3 font-medium">{t('admin.billing.qtyCol')}</th>
+							<th class="py-2 font-medium">{t('admin.billing.amountCol')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{records.map((r) => (
+							<tr class="border-b border-hairline-soft last:border-0">
+								<td class="py-2 pr-3 text-body">{r.date}</td>
+								<td class="py-2 pr-3 text-body">{r.shift === 'morning' ? t('common.morning') : t('common.evening')}</td>
+								<td class="py-2 pr-3 text-body">{r.status === 'delivered' ? r.actual_quantity + r.extra_quantity : '—'}</td>
+								<td class="py-2 font-medium text-ink">{r.status === 'delivered' ? `${t('common.rupee')}${r.amount.toFixed(2)}` : t('admin.deliveries.markSkip')}</td>
+							</tr>
+						))}
+						{records.length === 0 && (
+							<tr><td colspan="4" class="py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
+						)}
+					</tbody>
+				</table>
+			</div>
+		</section>
+
+		<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+			<h2 class="text-lg font-semibold text-ink">{t('admin.customers.paymentHistory')}</h2>
+			<div class="mt-4 overflow-x-auto">
+				<table class="w-full text-left text-sm">
+					<thead class="border-b border-hairline text-mute">
+						<tr>
+							<th class="py-2 pr-3 font-medium">{t('admin.billing.dateCol')}</th>
+							<th class="py-2 pr-3 font-medium">{t('admin.payments.method')}</th>
+							<th class="py-2 font-medium">{t('admin.billing.amountCol')}</th>
+						</tr>
+					</thead>
+					<tbody>
+						{payments.map((p) => (
+							<tr class="border-b border-hairline-soft last:border-0">
+								<td class="py-2 pr-3 text-body">{p.payment_date}</td>
+								<td class="py-2 pr-3 text-body capitalize">{p.method}</td>
+								<td class="py-2 font-medium text-ink">{t('common.rupee')}{p.amount.toFixed(2)}</td>
+							</tr>
+						))}
+						{payments.length === 0 && (
+							<tr><td colspan="3" class="py-4 text-center text-mute">—</td></tr>
+						)}
+					</tbody>
+				</table>
+			</div>
+		</section>
+	</div>
+</AdminLayout>

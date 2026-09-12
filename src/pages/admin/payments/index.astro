@@ -1,0 +1,110 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { actions } from 'astro:actions';
+import { listCustomers } from '../../../lib/db/customers';
+import { listPendingBalances, listRecentPayments } from '../../../lib/db/payments';
+
+const { t } = Astro.locals;
+const result = Astro.getActionResult(actions.payments.record);
+const customers = listCustomers({ activeOnly: true });
+const pendingBalances = listPendingBalances();
+const recentPayments = listRecentPayments(15);
+const today = new Date().toISOString().slice(0, 10);
+---
+
+<AdminLayout title={t('admin.payments.title')} active="payments">
+	<h1 class="text-2xl font-semibold tracking-tight text-ink">{t('admin.payments.title')}</h1>
+
+	<div class="mt-6 grid gap-6 lg:grid-cols-2">
+		<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+			<h2 class="text-lg font-semibold text-ink">{t('admin.payments.recordTitle')}</h2>
+			<form method="POST" action={actions.payments.record} class="mt-4 space-y-4">
+				{
+					result?.error && (
+						<p class="rounded-md bg-warning-soft px-3 py-2 text-sm text-warning-deep">{result.error.message}</p>
+					)
+				}
+				<div>
+					<label class="block text-sm font-medium text-ink" for="customer_id">{t('admin.payments.selectCustomer')}</label>
+					<select id="customer_id" name="customer_id" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">
+						{customers.map((c) => <option value={c.id}>{c.name}</option>)}
+					</select>
+				</div>
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<label class="block text-sm font-medium text-ink" for="amount">{t('admin.payments.amount')}</label>
+						<input id="amount" name="amount" type="number" step="0.01" min="0.01" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+					<div>
+						<label class="block text-sm font-medium text-ink" for="payment_date">{t('admin.payments.date')}</label>
+						<input id="payment_date" name="payment_date" type="date" value={today} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+					</div>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-ink" for="method">{t('admin.payments.method')}</label>
+					<select id="method" name="method" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">
+						<option value="cash">{t('admin.payments.methodCash')}</option>
+						<option value="phonepe">{t('admin.payments.methodPhonepe')}</option>
+						<option value="other">{t('admin.payments.methodOther')}</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium text-ink" for="note">{t('admin.payments.note')}</label>
+					<input id="note" name="note" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
+				</div>
+				<button type="submit" class="h-11 rounded-[100px] bg-ink px-6 text-base font-medium text-on-primary transition-colors hover:bg-ink/90">
+					{t('admin.payments.save')}
+				</button>
+			</form>
+		</section>
+
+		<section class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+			<h2 class="text-lg font-semibold text-ink">{t('admin.payments.pendingTitle')}</h2>
+			{
+				pendingBalances.length === 0 ? (
+					<p class="mt-4 text-sm text-mute">{t('admin.payments.noPending')}</p>
+				) : (
+					<ul class="mt-4 divide-y divide-hairline-soft">
+						{pendingBalances.map((p) => (
+							<li class="flex items-center justify-between py-2 text-sm">
+								<a href={`/admin/customers/${p.customer_id}`} class="font-medium text-ink hover:text-accent">{p.name}</a>
+								<span class="font-medium text-error-deep">{t('common.rupee')}{p.pending.toFixed(2)}</span>
+							</li>
+						))}
+					</ul>
+				)
+			}
+		</section>
+	</div>
+
+	<section class="mt-6 rounded-lg border border-hairline bg-canvas-elevated p-6">
+		<h2 class="text-lg font-semibold text-ink">{t('admin.payments.recentTitle')}</h2>
+		<div class="mt-4 overflow-x-auto">
+			<table class="w-full text-left text-sm">
+				<thead class="border-b border-hairline text-mute">
+					<tr>
+						<th class="py-2 pr-3 font-medium">{t('admin.billing.dateCol')}</th>
+						<th class="py-2 pr-3 font-medium">{t('common.name')}</th>
+						<th class="py-2 pr-3 font-medium">{t('admin.payments.method')}</th>
+						<th class="py-2 font-medium">{t('admin.billing.amountCol')}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{recentPayments.map((p) => (
+						<tr class="border-b border-hairline-soft last:border-0">
+							<td class="py-2 pr-3 text-body">{p.payment_date}</td>
+							<td class="py-2 pr-3">
+								<a href={`/admin/customers/${p.customer_id}`} class="text-ink hover:text-accent">{p.customer_name}</a>
+							</td>
+							<td class="py-2 pr-3 text-body capitalize">{p.method}</td>
+							<td class="py-2 font-medium text-ink">{t('common.rupee')}{p.amount.toFixed(2)}</td>
+						</tr>
+					))}
+					{recentPayments.length === 0 && (
+						<tr><td colspan="4" class="py-4 text-center text-mute">—</td></tr>
+					)}
+				</tbody>
+			</table>
+		</div>
+	</section>
+</AdminLayout>

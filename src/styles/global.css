@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+
+/* Self-hosted fonts (Inter stands in for Geist Sans, JetBrains Mono for Geist Mono). */
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/jetbrains-mono';
+
+/*
+ * Design tokens ported from DESIGN.md's Vercel "Geist" analysis, then recolored into a
+ * warm, earthy Indian dairy-farm palette: a roasted-earth-brown ink sits on a milk/wheat
+ * cream canvas (instead of near-black on near-white grey), hairlines are warmed toward
+ * wheat rather than cold grey, and the accent system pairs pasture green with a mustard
+ * harvest gold so the site reads as milk, soil, and farmland rather than a dev tool.
+ */
+@theme {
+	--font-sans: 'Inter Variable', 'Inter', system-ui, sans-serif;
+	--font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+	/* Ink / canvas / hairline ladder — warmed from DESIGN.md's cool greys toward earth and milk */
+	--color-ink: #2e2418;
+	--color-on-primary: #fffaf0;
+	--color-body: #5c5346;
+	--color-mute: #8f8579;
+	--color-faint: #a89e91;
+	--color-hairline: #ece4d6;
+	--color-hairline-soft: #f3ede1;
+	--color-canvas: #faf6ee;
+	--color-canvas-elevated: #fffdf8;
+
+	/* Accent — pasture green as the primary link/focus/success color */
+	--color-accent: #4a7c3f;
+	--color-accent-deep: #345a2c;
+	--color-accent-soft: #e3ecdb;
+
+	/* Secondary accent — mustard harvest gold, for highlights and badges */
+	--color-harvest: #c17f2b;
+	--color-harvest-deep: #96601c;
+	--color-harvest-soft: #f7e8cf;
+
+	/* Wheat-field-over-pasture gradient stops — the hero's single decorative flourish */
+	--color-gradient-milk: #fffaf0;
+	--color-gradient-cream: #f7e8cf;
+	--color-gradient-amber: #d99a34;
+	--color-gradient-leaf: #6f9c5f;
+	--color-gradient-pasture: #345a2c;
+
+	/* Semantic */
+	--color-error: #d0342c;
+	--color-error-deep: #a8261f;
+	--color-warning: #b5760f;
+	--color-warning-soft: #fbeed2;
+	--color-warning-deep: #8a5a0a;
+
+	/* Radii */
+	--radius-none: 0px;
+	--radius-sm: 6px;
+	--radius-md: 12px;
+	--radius-lg: 16px;
+	--radius-pill-category: 64px;
+	--radius-pill: 100px;
+
+	/*
+	 * Reference spacing scale (4px base) from DESIGN.md, kept under a "--space-*" prefix
+	 * rather than "--spacing-*" — the latter is a reserved Tailwind v4 theme namespace, and
+	 * defining named keys there (sm/md/lg/xl/2xl/...) silently overrides built-in utilities
+	 * that share those suffixes, e.g. max-w-sm and max-w-xl.
+	 */
+	--space-xxs: 4px;
+	--space-xs: 8px;
+	--space-sm: 12px;
+	--space-md: 16px;
+	--space-lg: 24px;
+	--space-xl: 32px;
+	--space-2xl: 40px;
+	--space-3xl: 64px;
+	--space-4xl: 96px;
+	--space-section: 128px;
+}
+
+@layer base {
+	html {
+		background-color: var(--color-canvas);
+		color: var(--color-ink);
+		font-family: var(--font-sans);
+		-webkit-tap-highlight-color: transparent;
+	}
+	body {
+		background-color: var(--color-canvas);
+	}
+	h1,
+	h2,
+	h3 {
+		font-weight: 600;
+		letter-spacing: -0.02em;
+	}
+}
+
+@layer utilities {
+	/* Hero mesh gradient: dawn cream/amber blooming over pasture green, with a milk-white
+	   highlight — the only place this site allows itself decorative color. */
+	.hero-mesh {
+		background-image:
+			radial-gradient(circle at 12% 18%, var(--color-gradient-cream) 0%, transparent 42%),
+			radial-gradient(circle at 82% 8%, var(--color-gradient-amber) 0%, transparent 48%),
+			radial-gradient(circle at 78% 78%, var(--color-gradient-leaf) 0%, transparent 50%),
+			radial-gradient(circle at 15% 85%, var(--color-gradient-pasture) 0%, transparent 45%),
+			radial-gradient(circle at 50% 50%, var(--color-gradient-milk) 0%, transparent 60%);
+		filter: saturate(1.05);
+	}
+}

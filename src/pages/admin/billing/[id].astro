@@ -1,0 +1,66 @@
+---
+import AdminLayout from '../../../layouts/AdminLayout.astro';
+import { getMonthlyStatement } from '../../../lib/db/billing';
+
+const { t } = Astro.locals;
+const id = Number(Astro.params.id);
+const yearMonth = Astro.url.searchParams.get('month') ?? new Date().toISOString().slice(0, 7);
+const statement = getMonthlyStatement(id, yearMonth);
+
+if (!statement.customer) {
+	return Astro.redirect('/admin/billing');
+}
+---
+
+<AdminLayout title={`${t('admin.billing.statementTitle')} · ${statement.customer.name}`} active="billing">
+	<a href={`/admin/billing?month=${yearMonth}`} class="text-sm text-mute hover:text-ink">← {t('common.back')}</a>
+	<h1 class="mt-2 text-2xl font-semibold tracking-tight text-ink">{statement.customer.name}</h1>
+	<p class="mt-1 text-sm text-mute">{yearMonth}</p>
+
+	<div class="mt-6 grid gap-4 sm:grid-cols-4">
+		<div class="rounded-lg border border-hairline bg-canvas-elevated p-4">
+			<p class="text-xs text-mute">{t('admin.billing.totalLiters')}</p>
+			<p class="mt-1 text-xl font-semibold text-ink">{statement.totalLiters} {t('common.liters')}</p>
+		</div>
+		<div class="rounded-lg border border-hairline bg-canvas-elevated p-4">
+			<p class="text-xs text-mute">{t('admin.billing.totalAmount')}</p>
+			<p class="mt-1 text-xl font-semibold text-ink">{t('common.rupee')}{statement.totalAmount.toFixed(2)}</p>
+		</div>
+		<div class="rounded-lg border border-hairline bg-canvas-elevated p-4">
+			<p class="text-xs text-mute">{t('admin.billing.paid')}</p>
+			<p class="mt-1 text-xl font-semibold text-ink">{t('common.rupee')}{statement.paidInMonth.toFixed(2)}</p>
+		</div>
+		<div class="rounded-lg border border-hairline bg-canvas-elevated p-4">
+			<p class="text-xs text-mute">{t('admin.billing.pending')}</p>
+			<p class="mt-1 text-xl font-semibold text-error-deep">{t('common.rupee')}{statement.pendingOverall.toFixed(2)}</p>
+		</div>
+	</div>
+
+	<div class="mt-6 overflow-x-auto rounded-lg border border-hairline bg-canvas-elevated">
+		<table class="w-full text-left text-sm">
+			<thead class="border-b border-hairline text-mute">
+				<tr>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.dateCol')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.shiftCol')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.statusCol')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.qtyCol')}</th>
+					<th class="px-4 py-3 font-medium">{t('admin.billing.amountCol')}</th>
+				</tr>
+			</thead>
+			<tbody>
+				{statement.records.map((r) => (
+					<tr class="border-b border-hairline-soft last:border-0">
+						<td class="px-4 py-3 text-body">{r.date}</td>
+						<td class="px-4 py-3 text-body">{r.shift === 'morning' ? t('common.morning') : t('common.evening')}</td>
+						<td class="px-4 py-3 text-body capitalize">{r.status}</td>
+						<td class="px-4 py-3 text-body">{r.status === 'delivered' ? r.actual_quantity + r.extra_quantity : '—'}</td>
+						<td class="px-4 py-3 font-medium text-ink">{t('common.rupee')}{r.amount.toFixed(2)}</td>
+					</tr>
+				))}
+				{statement.records.length === 0 && (
+					<tr><td colspan="5" class="px-4 py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
+				)}
+			</tbody>
+		</table>
+	</div>
+</AdminLayout>
