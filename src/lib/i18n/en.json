@@ -30,7 +30,7 @@
 	"hero": {
 		"eyebrow": "DHAKEPHAL → AURANGABAD",
 		"title": "Fresh milk from our cows, delivered to your door every morning",
-		"subtitle": "A small family farm in Dhakephal delivering pure, fresh cow milk to homes in Aurangabad — no middlemen, no mixing, just honest milk.",
+		"subtitle": "A small family farm in Dhakephal delivering pure, fresh cow milk to homes in Aurangabad, no middlemen, no mixing, just honest milk.",
 		"ctaPrimary": "Family / Admin Login",
 		"ctaSecondary": "Delivery Worker Login",
 		"rateNote": "Milk from ₹100/L · morning & evening delivery"
@@ -38,7 +38,7 @@
 	"story": {
 		"eyebrow": "OUR STORY",
 		"title": "Raised on our own farm, not a warehouse",
-		"body": "Every liter comes from cows we raise ourselves in Dhakephal. We started by delivering to a few neighbours in Aurangabad — today it's grown into a small trusted round, still tracked by hand in notebooks and WhatsApp. This website is the next step: the same honest service, made a little easier for everyone."
+		"body": "Every liter comes from cows we raise ourselves in Dhakephal. We started by delivering to a few neighbours in Aurangabad, today it's grown into a small trusted round, still tracked by hand in notebooks and WhatsApp. This website is the next step: the same honest service, made a little easier for everyone."
 	},
 	"how": {
 		"eyebrow": "HOW IT WORKS",
@@ -46,14 +46,14 @@
 		"step1Title": "Tell us your daily quantity",
 		"step1Body": "Morning and evening milk, set once and change anytime.",
 		"step2Title": "We deliver fresh, every day",
-		"step2Body": "Going out of town? Skip a delivery or add extra milk anytime — we keep track.",
+		"step2Body": "Going out of town? Skip a delivery or add extra milk anytime, we keep track.",
 		"step3Title": "Pay monthly, the way you always have",
-		"step3Body": "Cash or PhonePe — we keep a clear running account so there's never any confusion."
+		"step3Body": "Cash or PhonePe, we keep a clear running account so there's never any confusion."
 	},
 	"trust": {
 		"title": "Why families trust us",
 		"point1": "Our own cows, our own farm in Dhakephal",
-		"point2": "No mixing, no middlemen — milk reaches you the same day",
+		"point2": "No mixing, no middlemen, milk reaches you the same day",
 		"point3": "A real person delivers to your door, every single day"
 	},
 	"pricing": {
@@ -67,7 +67,7 @@
 		"callCta": "Call Us"
 	},
 	"footer": {
-		"location": "Dhakephal, Maharashtra — serving Aurangabad",
+		"location": "Dhakephal, Maharashtra, serving Aurangabad",
 		"rights": "Farm Fresh Milk. A family business."
 	},
 	"login": {
