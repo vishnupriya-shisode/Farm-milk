@@ -1,5 +1,7 @@
 # Astro Starter Kit: Basics
 
+[![e2e](https://github.com/vishnupriya-shisode/Farm-milk/actions/workflows/e2e.yml/badge.svg)](https://github.com/vishnupriya-shisode/Farm-milk/actions/workflows/e2e.yml)
+
 ```sh
 npm create astro@latest -- --template basics
 ```
