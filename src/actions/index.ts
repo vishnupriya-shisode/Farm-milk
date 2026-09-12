@@ -41,6 +41,7 @@ export const server = {
 			input: z.object({
 				role: z.enum(['admin', 'worker']),
 				pin: z.string().min(1),
+				next: z.string().optional(),
 			}),
 			handler: async (input, context) => {
 				const user = getUserByRole(input.role);
@@ -49,7 +50,7 @@ export const server = {
 				}
 				const token = createSessionToken({ role: user.role, name: user.name });
 				context.cookies.set(SESSION_COOKIE, token, sessionCookieOptions);
-				return { role: user.role };
+				return { role: user.role, next: input.next ?? null };
 			},
 		}),
 	},

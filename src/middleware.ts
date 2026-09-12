@@ -17,7 +17,7 @@ declare global {
 	}
 }
 
-const PROTECTED_PREFIXES: { prefix: string; roles: Role[] }[] = [
+export const PROTECTED_PREFIXES: { prefix: string; roles: Role[] }[] = [
 	{ prefix: '/admin', roles: ['admin'] },
 	{ prefix: '/worker', roles: ['worker', 'admin'] },
 ];

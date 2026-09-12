@@ -1,16 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { actions } from 'astro:actions';
+import { PROTECTED_PREFIXES } from '../middleware';
+import type { Role } from '../lib/auth/session';
 
 const { t, lang, user } = Astro.locals;
 
+function resolveDestination(role: Role, next: string | null): string {
+	const home = role === 'admin' ? '/admin' : '/worker';
+	if (!next || !next.startsWith('/') || next.startsWith('//')) return home;
+	const guard = PROTECTED_PREFIXES.find(({ prefix }) => next.startsWith(prefix));
+	if (guard && !guard.roles.includes(role)) return home;
+	return next;
+}
+
+const nextParam = Astro.url.searchParams.get('next');
+
 if (user) {
-	return Astro.redirect(user.role === 'admin' ? '/admin' : '/worker');
+	return Astro.redirect(resolveDestination(user.role, nextParam));
 }
 
 const result = Astro.getActionResult(actions.auth.login);
 if (result && !result.error) {
-	return Astro.redirect(result.data.role === 'admin' ? '/admin' : '/worker');
+	return Astro.redirect(resolveDestination(result.data.role, result.data.next ?? nextParam));
 }
 
 const roleParam = Astro.url.searchParams.get('role');
@@ -29,6 +41,7 @@ const initialRole = roleParam === 'worker' ? 'worker' : roleParam === 'admin' ? 
 				action={actions.auth.login}
 				class="mt-8 rounded-lg border border-hairline bg-canvas-elevated p-6"
 			>
+				{nextParam && <input type="hidden" name="next" value={nextParam} />}
 				{
 					result?.error && (
 						<p class="mb-4 rounded-md bg-warning-soft px-3 py-2 text-sm text-warning-deep">

@@ -3,7 +3,16 @@ import { createHmac, randomBytes, scryptSync, timingSafeEqual } from 'node:crypt
 export const SESSION_COOKIE = 'milk_session';
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30; // 30 days — this app is used from a few trusted phones
 
-const SECRET = process.env.SESSION_SECRET ?? 'dev-only-insecure-secret-change-me';
+function loadSecret(): string {
+	const secret = process.env.SESSION_SECRET;
+	if (secret) return secret;
+	if (import.meta.env.PROD) {
+		throw new Error('SESSION_SECRET environment variable must be set in production.');
+	}
+	return 'dev-only-insecure-secret-change-me';
+}
+
+const SECRET = loadSecret();
 
 export type Role = 'admin' | 'worker';
 
@@ -63,5 +72,6 @@ export const sessionCookieOptions = {
 	path: '/',
 	httpOnly: true,
 	sameSite: 'lax' as const,
+	secure: import.meta.env.PROD,
 	maxAge: SESSION_MAX_AGE_SECONDS,
 };
