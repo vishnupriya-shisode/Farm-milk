@@ -9,10 +9,6 @@ Astro.getActionResult(actions.deliveries.mark);
 
 const date = new Date().toISOString().slice(0, 10);
 const entries = getDayView(date);
-const grouped = {
-	morning: entries.filter((e) => e.shift === 'morning'),
-	evening: entries.filter((e) => e.shift === 'evening'),
-};
 ---
 
 <Layout title={`${t('worker.title')} · ${t('appName')}`} lang={lang}>
@@ -36,65 +32,55 @@ const grouped = {
 		<main class="mx-auto max-w-lg px-4 py-6">
 			<p class="text-sm text-body">{t('worker.subtitle')}</p>
 
-			{
-				(['morning', 'evening'] as const).map((shift) => (
-					<section class="mt-6">
-						<h2 class="text-sm font-semibold uppercase tracking-wide text-mute">
-							{shift === 'morning' ? t('worker.morning') : t('worker.evening')}
-						</h2>
-						<div class="mt-3 space-y-3">
-							{grouped[shift].map((entry) => (
-								<div class="rounded-lg border border-hairline bg-canvas-elevated p-4">
-									<div class="flex items-center justify-between">
-										<div>
-											<p class="font-medium text-ink">{entry.customer.name}</p>
-											<p class="text-sm text-mute">{entry.plannedQuantity} {t('common.liters')}</p>
-										</div>
-										{entry.record && (
-											<span
-												class:list={[
-													'rounded-full px-2 py-0.5 text-xs font-medium',
-													entry.record.status === 'delivered' ? 'bg-accent-soft text-accent-deep' : 'bg-warning-soft text-warning-deep',
-												]}
-											>
-												{entry.record.status === 'delivered' ? t('worker.doneTag') : t('admin.deliveries.markSkip')}
-											</span>
-										)}
-									</div>
-									<form method="POST" action={actions.deliveries.mark} class="mt-3 flex gap-2">
-										<input type="hidden" name="customer_id" value={entry.customer.id} />
-										<input type="hidden" name="date" value={date} />
-										<input type="hidden" name="shift" value={shift} />
-										<input type="hidden" name="actual_quantity" value={entry.plannedQuantity} />
-										<input type="hidden" name="extra_quantity" value={entry.record?.extra_quantity ?? 0} />
-										<button
-											type="submit"
-											name="status"
-											value="delivered"
-											class="h-10 flex-1 rounded-[100px] bg-accent text-sm font-medium text-white hover:bg-accent-deep"
-										>
-											{t('worker.delivered')}
-										</button>
-										<button
-											type="submit"
-											name="status"
-											value="skipped"
-											class="h-10 flex-1 rounded-[100px] border border-hairline text-sm font-medium text-body hover:bg-hairline-soft"
-										>
-											{t('worker.skip')}
-										</button>
-									</form>
-								</div>
-							))}
-							{grouped[shift].length === 0 && (
-								<p class="rounded-lg border border-dashed border-hairline p-4 text-center text-sm text-mute">
-									{t('worker.noCustomers')}
-								</p>
+			<div class="mt-6 space-y-3">
+				{entries.map((entry) => (
+					<div class="rounded-lg border border-hairline bg-canvas-elevated p-4">
+						<div class="flex items-center justify-between">
+							<div>
+								<p class="font-medium text-ink">{entry.customer.name}</p>
+								<p class="text-sm text-mute">{entry.plannedQuantity} {t('common.liters')}</p>
+							</div>
+							{entry.record && (
+								<span
+									class:list={[
+										'rounded-full px-2 py-0.5 text-xs font-medium',
+										entry.record.status === 'delivered' ? 'bg-accent-soft text-accent-deep' : 'bg-warning-soft text-warning-deep',
+									]}
+								>
+									{entry.record.status === 'delivered' ? t('worker.doneTag') : t('admin.deliveries.markSkip')}
+								</span>
 							)}
 						</div>
-					</section>
-				))
-			}
+						<form method="POST" action={actions.deliveries.mark} class="mt-3 flex gap-2">
+							<input type="hidden" name="customer_id" value={entry.customer.id} />
+							<input type="hidden" name="date" value={date} />
+							<input type="hidden" name="actual_quantity" value={entry.plannedQuantity} />
+							<input type="hidden" name="extra_quantity" value={entry.record?.extra_quantity ?? 0} />
+							<button
+								type="submit"
+								name="status"
+								value="delivered"
+								class="h-10 flex-1 rounded-[100px] bg-accent text-sm font-medium text-white hover:bg-accent-deep"
+							>
+								{t('worker.delivered')}
+							</button>
+							<button
+								type="submit"
+								name="status"
+								value="skipped"
+								class="h-10 flex-1 rounded-[100px] border border-hairline text-sm font-medium text-body hover:bg-hairline-soft"
+							>
+								{t('worker.skip')}
+							</button>
+						</form>
+					</div>
+				))}
+				{entries.length === 0 && (
+					<p class="rounded-lg border border-dashed border-hairline p-4 text-center text-sm text-mute">
+						{t('worker.noCustomers')}
+					</p>
+				)}
+			</div>
 		</main>
 	</div>
 </Layout>

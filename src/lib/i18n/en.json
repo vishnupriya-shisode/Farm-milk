@@ -9,8 +9,6 @@
 		"today": "Today",
 		"liters": "L",
 		"rupee": "₹",
-		"morning": "Morning",
-		"evening": "Evening",
 		"active": "Active",
 		"paused": "Paused",
 		"name": "Name",
@@ -33,22 +31,43 @@
 		"subtitle": "A small family farm in Dhakephal delivering pure, fresh cow milk to homes in Aurangabad, no middlemen, no mixing, just honest milk.",
 		"ctaPrimary": "Family / Admin Login",
 		"ctaSecondary": "Delivery Worker Login",
-		"rateNote": "Milk from ₹100/L · morning & evening delivery"
+		"rateNote": "Milk from ₹100/L · morning delivery only"
 	},
 	"story": {
 		"eyebrow": "OUR STORY",
 		"title": "Raised on our own farm, not a warehouse",
 		"body": "Every liter comes from cows we raise ourselves in Dhakephal. We started by delivering to a few neighbours in Aurangabad, today it's grown into a small trusted round, still tracked by hand in notebooks and WhatsApp. This website is the next step: the same honest service, made a little easier for everyone."
 	},
+	"farm": {
+		"eyebrow": "BEHIND THE FARM",
+		"title": "See where your milk comes from",
+		"body": "Real photos and videos of our cows, feed, and the morning milking are on their way. Until then, here's a peek at what a typical morning at our farm looks like.",
+		"card1Title": "Our own herd",
+		"card1Body": "Raised and cared for by us, in Dhakephal",
+		"card2Title": "Milked fresh",
+		"card2Body": "Every morning, the same honest routine",
+		"card3Title": "Ready to travel",
+		"card3Body": "Straight into the can and on its way to you"
+	},
 	"how": {
 		"eyebrow": "HOW IT WORKS",
 		"title": "Simple, like it always was",
 		"step1Title": "Tell us your daily quantity",
-		"step1Body": "Morning and evening milk, set once and change anytime.",
+		"step1Body": "Your daily morning milk, set once and change anytime.",
 		"step2Title": "We deliver fresh, every day",
 		"step2Body": "Going out of town? Skip a delivery or add extra milk anytime, we keep track.",
 		"step3Title": "Pay monthly, the way you always have",
 		"step3Body": "Cash or PhonePe, we keep a clear running account so there's never any confusion."
+	},
+	"freshness": {
+		"eyebrow": "FROM FARM TO YOUR DOOR",
+		"title": "You'll always know how fresh it is",
+		"step1Time": "6:00 AM",
+		"step1Label": "Milked in Dhakephal",
+		"step2Time": "by 9:00 AM",
+		"step2Label": "Arrives in Aurangabad",
+		"step3Time": "morning delivery",
+		"step3Label": "At your door"
 	},
 	"trust": {
 		"title": "Why families trust us",
@@ -59,7 +78,8 @@
 	"pricing": {
 		"eyebrow": "PRICING",
 		"title": "Straightforward, no surprises",
-		"body": "Milk starts from ₹100 per liter for daily morning or evening delivery. Billed monthly, just like before, no plans, no hidden charges."
+		"body": "Milk starts from ₹100 per liter for daily morning delivery. Billed monthly, just like before, no plans, no hidden charges.",
+		"scheduleNote": "Morning delivery only"
 	},
 	"contact": {
 		"title": "Want to become a customer?",
@@ -111,8 +131,7 @@
 			"title": "Customers",
 			"addNew": "Add New Customer",
 			"empty": "No customers yet. Add your first one.",
-			"morningQty": "Morning Qty (L)",
-			"eveningQty": "Evening Qty (L)",
+			"morningQty": "Daily Qty (L)",
 			"rate": "Rate per Liter (₹)",
 			"pendingLabel": "Pending",
 			"saveCustomer": "Save Customer",
@@ -127,7 +146,6 @@
 		"deliveries": {
 			"title": "Daily Deliveries",
 			"morningShift": "Morning",
-			"eveningShift": "Evening",
 			"plannedQty": "Planned",
 			"markDelivered": "Delivered",
 			"markSkip": "Skip",
@@ -165,7 +183,6 @@
 			"viewStatement": "View Statement",
 			"statementTitle": "Monthly Statement",
 			"dateCol": "Date",
-			"shiftCol": "Shift",
 			"qtyCol": "Qty (L)",
 			"amountCol": "Amount (₹)",
 			"statusCol": "Status",
@@ -175,7 +192,6 @@
 			"title": "Temporary Quantity Change",
 			"from": "From Date",
 			"to": "To Date",
-			"shift": "Shift",
 			"qty": "New Quantity (L)",
 			"reason": "Reason (optional)",
 			"save": "Save Change"
@@ -201,8 +217,6 @@
 		"delivered": "Delivered",
 		"skip": "Skip",
 		"extra": "Extra",
-		"doneTag": "Done",
-		"morning": "Morning",
-		"evening": "Evening"
+		"doneTag": "Done"
 	}
 }

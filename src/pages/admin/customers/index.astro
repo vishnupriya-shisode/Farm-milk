@@ -33,7 +33,6 @@ const withPending = customers.map((c) => ({ ...c, pending: getPendingBalance(c.i
 							<th class="px-4 py-3 font-medium">{t('common.name')}</th>
 							<th class="px-4 py-3 font-medium">{t('common.phone')}</th>
 							<th class="px-4 py-3 font-medium">{t('admin.customers.morningQty')}</th>
-							<th class="px-4 py-3 font-medium">{t('admin.customers.eveningQty')}</th>
 							<th class="px-4 py-3 font-medium">{t('common.status')}</th>
 							<th class="px-4 py-3 font-medium">{t('admin.customers.pendingLabel')}</th>
 						</tr>
@@ -48,7 +47,6 @@ const withPending = customers.map((c) => ({ ...c, pending: getPendingBalance(c.i
 								</td>
 								<td class="px-4 py-3 text-body">{c.phone ?? '—'}</td>
 								<td class="px-4 py-3 text-body">{c.default_qty_morning}</td>
-								<td class="px-4 py-3 text-body">{c.default_qty_evening}</td>
 								<td class="px-4 py-3">
 									<span
 										class:list={[

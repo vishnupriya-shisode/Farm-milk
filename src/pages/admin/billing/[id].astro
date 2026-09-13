@@ -41,7 +41,6 @@ if (!statement.customer) {
 			<thead class="border-b border-hairline text-mute">
 				<tr>
 					<th class="px-4 py-3 font-medium">{t('admin.billing.dateCol')}</th>
-					<th class="px-4 py-3 font-medium">{t('admin.billing.shiftCol')}</th>
 					<th class="px-4 py-3 font-medium">{t('admin.billing.statusCol')}</th>
 					<th class="px-4 py-3 font-medium">{t('admin.billing.qtyCol')}</th>
 					<th class="px-4 py-3 font-medium">{t('admin.billing.amountCol')}</th>
@@ -51,14 +50,13 @@ if (!statement.customer) {
 				{statement.records.map((r) => (
 					<tr class="border-b border-hairline-soft last:border-0">
 						<td class="px-4 py-3 text-body">{r.date}</td>
-						<td class="px-4 py-3 text-body">{r.shift === 'morning' ? t('common.morning') : t('common.evening')}</td>
 						<td class="px-4 py-3 text-body capitalize">{r.status}</td>
 						<td class="px-4 py-3 text-body">{r.status === 'delivered' ? r.actual_quantity + r.extra_quantity : '—'}</td>
 						<td class="px-4 py-3 font-medium text-ink">{t('common.rupee')}{r.amount.toFixed(2)}</td>
 					</tr>
 				))}
 				{statement.records.length === 0 && (
-					<tr><td colspan="5" class="px-4 py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
+					<tr><td colspan="4" class="px-4 py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
 				)}
 			</tbody>
 		</table>

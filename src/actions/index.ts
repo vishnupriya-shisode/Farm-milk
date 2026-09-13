@@ -29,7 +29,6 @@ const customerFields = {
 	phone: z.string().optional(),
 	address: z.string().optional(),
 	default_qty_morning: z.coerce.number().min(0),
-	default_qty_evening: z.coerce.number().min(0),
 	rate_per_liter: z.coerce.number().min(0),
 	status: z.enum(['active', 'paused']).optional(),
 	notes: z.string().optional(),
@@ -119,7 +118,6 @@ export const server = {
 			accept: 'form',
 			input: z.object({
 				customer_id: z.coerce.number(),
-				shift: z.enum(['morning', 'evening']),
 				start_date: z.string().min(1),
 				end_date: z.string().min(1),
 				quantity: z.coerce.number().min(0),
@@ -138,7 +136,6 @@ export const server = {
 			input: z.object({
 				customer_id: z.coerce.number(),
 				date: z.string().min(1),
-				shift: z.enum(['morning', 'evening']),
 				status: z.enum(['delivered', 'skipped']),
 				actual_quantity: z.coerce.number().min(0).default(0),
 				extra_quantity: z.coerce.number().min(0).default(0),

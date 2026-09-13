@@ -60,15 +60,9 @@ const today = new Date().toISOString().slice(0, 10);
 					<input id="address" name="address" value={customer.address ?? ''} class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
 				</div>
 
-				<div class="grid grid-cols-2 gap-4">
-					<div>
-						<label class="block text-sm font-medium text-ink" for="default_qty_morning">{t('admin.customers.morningQty')}</label>
-						<input id="default_qty_morning" name="default_qty_morning" type="number" step="0.1" min="0" value={customer.default_qty_morning} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
-					</div>
-					<div>
-						<label class="block text-sm font-medium text-ink" for="default_qty_evening">{t('admin.customers.eveningQty')}</label>
-						<input id="default_qty_evening" name="default_qty_evening" type="number" step="0.1" min="0" value={customer.default_qty_evening} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
-					</div>
+				<div>
+					<label class="block text-sm font-medium text-ink" for="default_qty_morning">{t('admin.customers.morningQty')}</label>
+					<input id="default_qty_morning" name="default_qty_morning" type="number" step="0.1" min="0" value={customer.default_qty_morning} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
 				</div>
 
 				<div>
@@ -133,18 +127,9 @@ const today = new Date().toISOString().slice(0, 10);
 							<input id="end_date" name="end_date" type="date" value={today} required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
 						</div>
 					</div>
-					<div class="grid grid-cols-2 gap-4">
-						<div>
-							<label class="block text-sm font-medium text-ink" for="shift">{t('admin.override.shift')}</label>
-							<select id="shift" name="shift" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink">
-								<option value="morning">{t('common.morning')}</option>
-								<option value="evening">{t('common.evening')}</option>
-							</select>
-						</div>
-						<div>
-							<label class="block text-sm font-medium text-ink" for="quantity">{t('admin.override.qty')}</label>
-							<input id="quantity" name="quantity" type="number" step="0.1" min="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
-						</div>
+					<div>
+						<label class="block text-sm font-medium text-ink" for="quantity">{t('admin.override.qty')}</label>
+						<input id="quantity" name="quantity" type="number" step="0.1" min="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
 					</div>
 					<div>
 						<label class="block text-sm font-medium text-ink" for="reason">{t('admin.override.reason')}</label>
@@ -166,7 +151,6 @@ const today = new Date().toISOString().slice(0, 10);
 					<thead class="border-b border-hairline text-mute">
 						<tr>
 							<th class="py-2 pr-3 font-medium">{t('admin.billing.dateCol')}</th>
-							<th class="py-2 pr-3 font-medium">{t('admin.billing.shiftCol')}</th>
 							<th class="py-2 pr-3 font-medium">{t('admin.billing.qtyCol')}</th>
 							<th class="py-2 font-medium">{t('admin.billing.amountCol')}</th>
 						</tr>
@@ -175,13 +159,12 @@ const today = new Date().toISOString().slice(0, 10);
 						{records.map((r) => (
 							<tr class="border-b border-hairline-soft last:border-0">
 								<td class="py-2 pr-3 text-body">{r.date}</td>
-								<td class="py-2 pr-3 text-body">{r.shift === 'morning' ? t('common.morning') : t('common.evening')}</td>
 								<td class="py-2 pr-3 text-body">{r.status === 'delivered' ? r.actual_quantity + r.extra_quantity : '—'}</td>
 								<td class="py-2 font-medium text-ink">{r.status === 'delivered' ? `${t('common.rupee')}${r.amount.toFixed(2)}` : t('admin.deliveries.markSkip')}</td>
 							</tr>
 						))}
 						{records.length === 0 && (
-							<tr><td colspan="4" class="py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
+							<tr><td colspan="3" class="py-4 text-center text-mute">{t('admin.billing.noRecords')}</td></tr>
 						)}
 					</tbody>
 				</table>

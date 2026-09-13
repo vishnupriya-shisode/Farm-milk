@@ -1,13 +1,10 @@
 import { getDb } from './client';
 import { getPlannedQuantity, listCustomers, type Customer } from './customers';
 
-export type Shift = 'morning' | 'evening';
-
 export interface DeliveryRecord {
 	id: number;
 	customer_id: number;
 	date: string;
-	shift: Shift;
 	status: 'delivered' | 'skipped';
 	actual_quantity: number;
 	extra_quantity: number;
@@ -18,29 +15,26 @@ export interface DeliveryRecord {
 
 export interface DayEntry {
 	customer: Customer;
-	shift: Shift;
 	plannedQuantity: number;
 	record: DeliveryRecord | null;
 }
 
-/** Everything a given calendar date needs: active customers x shifts they actually take. */
+/** Everything a given calendar date needs: active customers who take a delivery that day. */
 export function getDayView(date: string): DayEntry[] {
 	const db = getDb();
 	const customers = listCustomers({ activeOnly: true });
 	const records = db
 		.prepare('SELECT * FROM delivery_records WHERE date = ?')
 		.all(date) as DeliveryRecord[];
-	const recordFor = (customerId: number, shift: Shift) =>
-		records.find((r) => r.customer_id === customerId && r.shift === shift) ?? null;
+	const recordFor = (customerId: number) =>
+		records.find((r) => r.customer_id === customerId) ?? null;
 
 	const entries: DayEntry[] = [];
 	for (const customer of customers) {
-		for (const shift of ['morning', 'evening'] as Shift[]) {
-			const plannedQuantity = getPlannedQuantity(customer, date, shift);
-			const record = recordFor(customer.id, shift);
-			if (plannedQuantity <= 0 && !record) continue; // customer doesn't take this shift
-			entries.push({ customer, shift, plannedQuantity, record });
-		}
+		const plannedQuantity = getPlannedQuantity(customer, date);
+		const record = recordFor(customer.id);
+		if (plannedQuantity <= 0 && !record) continue; // customer isn't taking delivery
+		entries.push({ customer, plannedQuantity, record });
 	}
 	return entries;
 }
@@ -48,7 +42,6 @@ export function getDayView(date: string): DayEntry[] {
 export function markDelivery(input: {
 	customer_id: number;
 	date: string;
-	shift: Shift;
 	status: 'delivered' | 'skipped';
 	actual_quantity: number;
 	extra_quantity: number;
@@ -63,10 +56,10 @@ export function markDelivery(input: {
 	getDb()
 		.prepare(
 			`INSERT INTO delivery_records
-				(customer_id, date, shift, status, actual_quantity, extra_quantity, rate_snapshot, amount, recorded_by, updated_at)
+				(customer_id, date, status, actual_quantity, extra_quantity, rate_snapshot, amount, recorded_by, updated_at)
 			 VALUES
-				(@customer_id, @date, @shift, @status, @actual_quantity, @extra_quantity, @rate_snapshot, @amount, @recorded_by, datetime('now'))
-			 ON CONFLICT(customer_id, date, shift) DO UPDATE SET
+				(@customer_id, @date, @status, @actual_quantity, @extra_quantity, @rate_snapshot, @amount, @recorded_by, datetime('now'))
+			 ON CONFLICT(customer_id, date) DO UPDATE SET
 				status = excluded.status,
 				actual_quantity = excluded.actual_quantity,
 				extra_quantity = excluded.extra_quantity,
@@ -81,7 +74,7 @@ export function markDelivery(input: {
 export function listRecordsForCustomer(customerId: number, limit = 30): DeliveryRecord[] {
 	return getDb()
 		.prepare(
-			'SELECT * FROM delivery_records WHERE customer_id = ? ORDER BY date DESC, shift ASC LIMIT ?',
+			'SELECT * FROM delivery_records WHERE customer_id = ? ORDER BY date DESC LIMIT ?',
 		)
 		.all(customerId, limit) as DeliveryRecord[];
 }
@@ -89,7 +82,7 @@ export function listRecordsForCustomer(customerId: number, limit = 30): Delivery
 export function listRecordsForCustomerInMonth(customerId: number, yearMonth: string): DeliveryRecord[] {
 	return getDb()
 		.prepare(
-			"SELECT * FROM delivery_records WHERE customer_id = ? AND date LIKE ? ORDER BY date ASC, shift ASC",
+			"SELECT * FROM delivery_records WHERE customer_id = ? AND date LIKE ? ORDER BY date ASC",
 		)
 		.all(customerId, `${yearMonth}%`) as DeliveryRecord[];
 }

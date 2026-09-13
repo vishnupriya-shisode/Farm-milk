@@ -3,6 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Button from '../components/ui/Button.astro';
 import Icon from '../components/ui/Icon.astro';
 import MilkHeroArt from '../components/ui/MilkHeroArt.astro';
+import MilkDoodle from '../components/ui/MilkDoodle.astro';
 
 const { t, lang } = Astro.locals;
 ---
@@ -47,6 +48,31 @@ const { t, lang } = Astro.locals;
 
 		<section class="border-b border-hairline bg-canvas-elevated">
 			<div class="mx-auto max-w-6xl px-6 py-20">
+				<p class="font-mono text-xs uppercase tracking-wide text-mute">{t('farm.eyebrow')}</p>
+				<h2 class="mt-3 max-w-2xl text-3xl font-semibold tracking-tight text-ink">{t('farm.title')}</h2>
+				<p class="mt-5 max-w-2xl text-base leading-relaxed text-body">{t('farm.body')}</p>
+				<div class="mt-10 grid gap-6 sm:grid-cols-3">
+					{
+						[
+							[t('farm.card1Title'), t('farm.card1Body'), 'cow' as const],
+							[t('farm.card2Title'), t('farm.card2Body'), 'drop' as const],
+							[t('farm.card3Title'), t('farm.card3Body'), 'carton' as const],
+						].map(([title, body, variant]) => (
+							<div class="rounded-lg border border-hairline bg-canvas-elevated p-6">
+								<span class="inline-flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft">
+									<MilkDoodle variant={variant} class="h-8 w-8" />
+								</span>
+								<h3 class="mt-4 text-lg font-semibold text-ink">{title}</h3>
+								<p class="mt-2 text-sm leading-relaxed text-body">{body}</p>
+							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="border-b border-hairline">
+			<div class="mx-auto max-w-6xl px-6 py-20">
 				<p class="font-mono text-xs uppercase tracking-wide text-mute">{t('how.eyebrow')}</p>
 				<h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">{t('how.title')}</h2>
 				<div class="mt-12 grid gap-8 sm:grid-cols-3">
@@ -63,6 +89,35 @@ const { t, lang } = Astro.locals;
 								<h3 class="mt-4 text-lg font-semibold text-ink">{title}</h3>
 								<p class="mt-2 text-sm leading-relaxed text-body">{body}</p>
 							</div>
+						))
+					}
+				</div>
+			</div>
+		</section>
+
+		<section class="border-b border-hairline bg-canvas-elevated">
+			<div class="mx-auto max-w-6xl px-6 py-20">
+				<p class="font-mono text-xs uppercase tracking-wide text-mute">{t('freshness.eyebrow')}</p>
+				<h2 class="mt-3 text-3xl font-semibold tracking-tight text-ink">{t('freshness.title')}</h2>
+				<div class="mt-12 flex flex-col gap-6 sm:flex-row sm:items-start">
+					{
+						[
+							[t('freshness.step1Time'), t('freshness.step1Label')],
+							[t('freshness.step2Time'), t('freshness.step2Label')],
+							[t('freshness.step3Time'), t('freshness.step3Label')],
+						].map(([time, label], i, steps) => (
+							<>
+								<div class="flex flex-1 flex-col items-center gap-3 text-center">
+									<span class="inline-flex h-12 w-12 items-center justify-center rounded-full bg-accent-soft text-accent-deep">
+										<Icon name="clock" class="h-6 w-6" />
+									</span>
+									<p class="font-mono text-xs uppercase tracking-wide text-accent-deep">{time}</p>
+									<p class="text-sm font-medium text-ink">{label}</p>
+								</div>
+								{i < steps.length - 1 && (
+									<div class="hidden self-center sm:block sm:h-px sm:w-12 sm:shrink-0 sm:bg-hairline sm:mt-[-2.75rem]" />
+								)}
+							</>
 						))
 					}
 				</div>
@@ -103,7 +158,7 @@ const { t, lang } = Astro.locals;
 						</span>
 						<div>
 							<p class="text-2xl font-semibold tracking-tight text-ink">₹100<span class="text-base font-normal text-mute">/L</span></p>
-							<p class="text-sm text-mute">{t('common.morning')} · {t('common.evening')}</p>
+							<p class="text-sm text-mute">{t('pricing.scheduleNote')}</p>
 						</div>
 					</div>
 				</div>

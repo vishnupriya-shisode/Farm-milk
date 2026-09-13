@@ -6,7 +6,6 @@ export interface Customer {
 	phone: string | null;
 	address: string | null;
 	default_qty_morning: number;
-	default_qty_evening: number;
 	rate_per_liter: number;
 	status: 'active' | 'paused';
 	notes: string | null;
@@ -18,7 +17,6 @@ export interface CustomerInput {
 	phone?: string;
 	address?: string;
 	default_qty_morning: number;
-	default_qty_evening: number;
 	rate_per_liter: number;
 	status?: 'active' | 'paused';
 	notes?: string;
@@ -27,7 +25,6 @@ export interface CustomerInput {
 export interface QuantityOverride {
 	id: number;
 	customer_id: number;
-	shift: 'morning' | 'evening';
 	start_date: string;
 	end_date: string;
 	quantity: number;
@@ -52,15 +49,14 @@ export function createCustomer(input: CustomerInput): number {
 	const db = getDb();
 	const result = db
 		.prepare(
-			`INSERT INTO customers (name, phone, address, default_qty_morning, default_qty_evening, rate_per_liter, status, notes)
-			 VALUES (@name, @phone, @address, @default_qty_morning, @default_qty_evening, @rate_per_liter, @status, @notes)`,
+			`INSERT INTO customers (name, phone, address, default_qty_morning, rate_per_liter, status, notes)
+			 VALUES (@name, @phone, @address, @default_qty_morning, @rate_per_liter, @status, @notes)`,
 		)
 		.run({
 			name: input.name,
 			phone: input.phone ?? null,
 			address: input.address ?? null,
 			default_qty_morning: input.default_qty_morning,
-			default_qty_evening: input.default_qty_evening,
 			rate_per_liter: input.rate_per_liter,
 			status: input.status ?? 'active',
 			notes: input.notes ?? null,
@@ -72,7 +68,7 @@ export function updateCustomer(id: number, input: CustomerInput): void {
 	const db = getDb();
 	db.prepare(
 		`UPDATE customers SET name = @name, phone = @phone, address = @address,
-		 default_qty_morning = @default_qty_morning, default_qty_evening = @default_qty_evening,
+		 default_qty_morning = @default_qty_morning,
 		 rate_per_liter = @rate_per_liter, status = @status, notes = @notes
 		 WHERE id = @id`,
 	).run({
@@ -81,7 +77,6 @@ export function updateCustomer(id: number, input: CustomerInput): void {
 		phone: input.phone ?? null,
 		address: input.address ?? null,
 		default_qty_morning: input.default_qty_morning,
-		default_qty_evening: input.default_qty_evening,
 		rate_per_liter: input.rate_per_liter,
 		status: input.status ?? 'active',
 		notes: input.notes ?? null,
@@ -90,7 +85,6 @@ export function updateCustomer(id: number, input: CustomerInput): void {
 
 export function createQuantityOverride(input: {
 	customer_id: number;
-	shift: 'morning' | 'evening';
 	start_date: string;
 	end_date: string;
 	quantity: number;
@@ -98,8 +92,8 @@ export function createQuantityOverride(input: {
 }): void {
 	getDb()
 		.prepare(
-			`INSERT INTO quantity_overrides (customer_id, shift, start_date, end_date, quantity, reason)
-			 VALUES (@customer_id, @shift, @start_date, @end_date, @quantity, @reason)`,
+			`INSERT INTO quantity_overrides (customer_id, start_date, end_date, quantity, reason)
+			 VALUES (@customer_id, @start_date, @end_date, @quantity, @reason)`,
 		)
 		.run({ ...input, reason: input.reason ?? null });
 }
@@ -112,16 +106,16 @@ export function listOverridesForCustomer(customerId: number): QuantityOverride[]
 		.all(customerId) as QuantityOverride[];
 }
 
-/** Planned quantity for a customer/date/shift, honoring any active temporary override. */
-export function getPlannedQuantity(customer: Customer, date: string, shift: 'morning' | 'evening'): number {
+/** Planned quantity for a customer/date, honoring any active temporary override. */
+export function getPlannedQuantity(customer: Customer, date: string): number {
 	const override = getDb()
 		.prepare(
 			`SELECT quantity FROM quantity_overrides
-			 WHERE customer_id = ? AND shift = ? AND start_date <= ? AND end_date >= ?
+			 WHERE customer_id = ? AND start_date <= ? AND end_date >= ?
 			 ORDER BY id DESC LIMIT 1`,
 		)
-		.get(customer.id, shift, date, date) as { quantity: number } | undefined;
+		.get(customer.id, date, date) as { quantity: number } | undefined;
 
 	if (override) return override.quantity;
-	return shift === 'morning' ? customer.default_qty_morning : customer.default_qty_evening;
+	return customer.default_qty_morning;
 }

@@ -17,7 +17,6 @@ CREATE TABLE IF NOT EXISTS customers (
 	phone TEXT,
 	address TEXT,
 	default_qty_morning REAL NOT NULL DEFAULT 0,
-	default_qty_evening REAL NOT NULL DEFAULT 0,
 	rate_per_liter REAL NOT NULL DEFAULT 60,
 	status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'paused')),
 	notes TEXT,
@@ -27,7 +26,6 @@ CREATE TABLE IF NOT EXISTS customers (
 CREATE TABLE IF NOT EXISTS quantity_overrides (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
-	shift TEXT NOT NULL CHECK (shift IN ('morning', 'evening')),
 	start_date TEXT NOT NULL,
 	end_date TEXT NOT NULL,
 	quantity REAL NOT NULL,
@@ -42,7 +40,6 @@ CREATE TABLE IF NOT EXISTS delivery_records (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	customer_id INTEGER NOT NULL REFERENCES customers(id) ON DELETE CASCADE,
 	date TEXT NOT NULL,
-	shift TEXT NOT NULL CHECK (shift IN ('morning', 'evening')),
 	status TEXT NOT NULL CHECK (status IN ('delivered', 'skipped')),
 	actual_quantity REAL NOT NULL DEFAULT 0,
 	extra_quantity REAL NOT NULL DEFAULT 0,
@@ -51,7 +48,7 @@ CREATE TABLE IF NOT EXISTS delivery_records (
 	recorded_by TEXT,
 	created_at TEXT NOT NULL DEFAULT (datetime('now')),
 	updated_at TEXT NOT NULL DEFAULT (datetime('now')),
-	UNIQUE(customer_id, date, shift)
+	UNIQUE(customer_id, date)
 );
 
 CREATE INDEX IF NOT EXISTS idx_delivery_records_date ON delivery_records(date);

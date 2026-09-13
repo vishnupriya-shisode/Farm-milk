@@ -44,15 +44,9 @@ if (result && !result.error) {
 		<label class="mt-4 block text-sm font-medium text-ink" for="address">{t('common.address')}</label>
 		<input id="address" name="address" class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
 
-		<div class="mt-4 grid grid-cols-2 gap-4">
-			<div>
-				<label class="block text-sm font-medium text-ink" for="default_qty_morning">{t('admin.customers.morningQty')}</label>
-				<input id="default_qty_morning" name="default_qty_morning" type="number" step="0.1" min="0" value="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
-			</div>
-			<div>
-				<label class="block text-sm font-medium text-ink" for="default_qty_evening">{t('admin.customers.eveningQty')}</label>
-				<input id="default_qty_evening" name="default_qty_evening" type="number" step="0.1" min="0" value="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
-			</div>
+		<div>
+			<label class="block text-sm font-medium text-ink" for="default_qty_morning">{t('admin.customers.morningQty')}</label>
+			<input id="default_qty_morning" name="default_qty_morning" type="number" step="0.1" min="0" value="0" required class="mt-1 w-full rounded-md border border-hairline px-3 py-2 outline-none focus:border-ink" />
 		</div>
 
 		<label class="mt-4 block text-sm font-medium text-ink" for="notes">{t('common.notes')}</label>
